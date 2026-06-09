@@ -1,0 +1,3265 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>合同管理系统 - 企业级合同审批平台</title>
+  <!-- Bootstrap & Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ==================== 左侧边栏 ==================== -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <i class="fa-solid fa-file-contract"></i> 合同管理
+    <small>系统</small>
+  </div>
+  <div class="user-panel">
+    <div class="avatar">管</div>
+    <div class="info">管理员 <small>超级管理员</small></div>
+  </div>
+  <ul class="sidebar-menu" id="sidebarMenu">
+    <!-- 个人中心 -->
+    <li class="active" data-menu="dashboard"><a href="#" onclick="switchPage('dashboard')"><i class="fa-solid fa-user-gear fa-fw"></i> 个人中心</a></li>
+
+    <!-- 合同档案 -->
+    <li class="treeview" data-menu="contractArchive">
+      <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-folder-open fa-fw"></i> 合同档案 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
+      <ul class="treeview-menu">
+        <li data-menu="contractLedger"><a href="#" onclick="switchPage('contract')"><i class="fa-solid fa-table-list fa-fw"></i> 合同台账</a></li>
+        <li data-menu="contractImport"><a href="#" onclick="switchPage('contractImport')"><i class="fa-solid fa-file-import fa-fw"></i> 合同导入</a></li>
+        <li data-menu="contractBorrow"><a href="#" onclick="switchPage('contractBorrow')"><i class="fa-solid fa-book-open fa-fw"></i> 合同借阅</a></li>
+      </ul>
+    </li>
+
+    <!-- 合同签订 -->
+    <li class="treeview" data-menu="contractSign">
+      <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-pen-to-square fa-fw"></i> 合同签订 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
+      <ul class="treeview-menu">
+        <li data-menu="contractTemplate"><a href="#" onclick="switchPage('contractTemplate')"><i class="fa-solid fa-file-lines fa-fw"></i> 合同模板</a></li>
+        <li data-menu="generalClause"><a href="#" onclick="switchPage('generalClause')"><i class="fa-solid fa-scale-balanced fa-fw"></i> 通用条款</a></li>
+        <li data-menu="contractDraft"><a href="#" onclick="switchPage('contractDraft')"><i class="fa-solid fa-pencil fa-fw"></i> 合同起草</a></li>
+        <li data-menu="contractApproval"><a href="#" onclick="switchPage('contractApproval')"><i class="fa-solid fa-clipboard-check fa-fw"></i> 合同审批 <span class="badge-right" id="badgeContractApproval">5</span></a></li>
+        <li data-menu="signMyAudit"><a href="#" onclick="switchPage('signMyAudit')"><i class="fa-solid fa-clipboard-list fa-fw"></i> 待我审批 <span class="badge-right" id="badgeSignMyAudit">3</span></a></li>
+        <li data-menu="contractSeal"><a href="#" onclick="switchPage('contractSeal')"><i class="fa-solid fa-stamp fa-fw"></i> 合同用印</a></li>
+      </ul>
+    </li>
+
+    <!-- 合同履约 -->
+    <li class="treeview" data-menu="contractFulfill">
+      <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-list-check fa-fw"></i> 合同履约 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
+      <ul class="treeview-menu">
+        <li data-menu="fulfillPlan"><a href="#" onclick="switchPage('fulfillPlan')"><i class="fa-solid fa-calendar-check fa-fw"></i> 履约计划</a></li>
+        <li data-menu="contractInvoice"><a href="#" onclick="switchPage('contractInvoice')"><i class="fa-solid fa-file-invoice fa-fw"></i> 合同发票</a></li>
+        <li data-menu="incomingInvoice"><a href="#" onclick="switchPage('incomingInvoice')"><i class="fa-solid fa-file-invoice-dollar fa-fw"></i> 来票登记</a></li>
+        <li data-menu="contractPayment"><a href="#" onclick="switchPage('contractPayment')"><i class="fa-solid fa-money-bill-transfer fa-fw"></i> 合同收付款</a></li>
+        <li data-menu="riskManage"><a href="#" onclick="switchPage('riskManage')"><i class="fa-solid fa-triangle-exclamation fa-fw"></i> 风险管理</a></li>
+        <li data-menu="contractChange"><a href="#" onclick="switchPage('contractChange')"><i class="fa-solid fa-rotate fa-fw"></i> 合同变更</a></li>
+        <li data-menu="fulfillSummary"><a href="#" onclick="switchPage('fulfillSummary')"><i class="fa-solid fa-file-signature fa-fw"></i> 履约总结</a></li>
+      </ul>
+    </li>
+
+    <!-- 合同AI工具 -->
+    <li class="treeview" data-menu="contractAI">
+      <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-robot fa-fw"></i> 合同AI工具 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
+      <ul class="treeview-menu">
+        <li data-menu="aiRecogImport"><a href="#" onclick="switchPage('aiRecogImport')"><i class="fa-solid fa-file-arrow-up fa-fw"></i> AI识别导入</a></li>
+        <li data-menu="aiCompare"><a href="#" onclick="switchPage('aiCompare')"><i class="fa-solid fa-code-compare fa-fw"></i> 合同AI比对</a></li>
+        <li data-menu="aiReview"><a href="#" onclick="switchPage('aiReview')"><i class="fa-solid fa-magnifying-glass-chart fa-fw"></i> 合同AI审查</a></li>
+        <li data-menu="aiWrite"><a href="#" onclick="switchPage('aiWrite')"><i class="fa-solid fa-wand-magic-sparkles fa-fw"></i> 合同AI智写</a></li>
+      </ul>
+    </li>
+
+    <!-- 相对方管理 -->
+    <li class="treeview" data-menu="counterPartyMgmt">
+      <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-handshake fa-fw"></i> 相对方管理 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
+      <ul class="treeview-menu">
+        <li data-menu="counterPartyLib"><a href="#" onclick="switchPage('counterPartyLib')"><i class="fa-solid fa-building-columns fa-fw"></i> 相对方库</a></li>
+        <li data-menu="counterPartyEval"><a href="#" onclick="switchPage('counterPartyEval')"><i class="fa-solid fa-star-half-stroke fa-fw"></i> 相对方评价</a></li>
+        <li data-menu="counterPartyRisk"><a href="#" onclick="switchPage('counterPartyRisk')"><i class="fa-solid fa-shield-virus fa-fw"></i> 相对方风控监测</a></li>
+        <li data-menu="counterPartyBlack"><a href="#" onclick="switchPage('counterPartyBlack')"><i class="fa-solid fa-ban fa-fw"></i> 相对方黑名单</a></li>
+      </ul>
+    </li>
+
+    <!-- 报表中心 -->
+    <li class="treeview" data-menu="reportCenter">
+      <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-chart-bar fa-fw"></i> 报表中心 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
+      <ul class="treeview-menu">
+        <li data-menu="contractStats"><a href="#" onclick="switchPage('contractStats')"><i class="fa-solid fa-chart-line fa-fw"></i> 合同统计</a></li>
+        <li data-menu="counterPartyStats"><a href="#" onclick="switchPage('counterPartyStats')"><i class="fa-solid fa-chart-pie fa-fw"></i> 相对方统计</a></li>
+        <li data-menu="financeStats"><a href="#" onclick="switchPage('financeStats')"><i class="fa-solid fa-coins fa-fw"></i> 财务统计</a></li>
+      </ul>
+    </li>
+
+    <!-- 基础设置 -->
+    <li class="treeview" data-menu="basicSettings">
+      <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-gear fa-fw"></i> 基础设置 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
+      <ul class="treeview-menu">
+        <li data-menu="contractEntity"><a href="#" onclick="switchPage('contractEntity')"><i class="fa-solid fa-building fa-fw"></i> 合同主体维护</a></li>
+        <li data-menu="contractCategory"><a href="#" onclick="switchPage('contractCategory')"><i class="fa-solid fa-tags fa-fw"></i> 合同类别维护</a></li>
+        <li data-menu="counterPartySetting"><a href="#" onclick="switchPage('counterPartySetting')"><i class="fa-solid fa-handshake fa-fw"></i> 相对方管理</a></li>
+        <li data-menu="approvalFlow"><a href="#" onclick="switchPage('approvalFlow')"><i class="fa-solid fa-code-branch fa-fw"></i> 审批流设置</a></li>
+        <li data-menu="noRule"><a href="#" onclick="switchPage('noRule')"><i class="fa-solid fa-barcode fa-fw"></i> 合同编号规则</a></li>
+        <li data-menu="notifySetting"><a href="#" onclick="switchPage('notifySetting')"><i class="fa-regular fa-bell fa-fw"></i> 通知提醒设置</a></li>
+        <li data-menu="sealManage"><a href="#" onclick="switchPage('sealManage')"><i class="fa-solid fa-stamp fa-fw"></i> 印章管理</a></li>
+        <li data-menu="aiModelConfig"><a href="#" onclick="switchPage('aiModelConfig')"><i class="fa-solid fa-microchip fa-fw"></i> AI模型配置</a></li>
+        <li data-menu="bizApiConfig"><a href="#" onclick="switchPage('bizApiConfig')"><i class="fa-solid fa-plug fa-fw"></i> 工商接口配置</a></li>
+        <li data-menu="emailConfig"><a href="#" onclick="switchPage('emailConfig')"><i class="fa-solid fa-envelope fa-fw"></i> 邮件发送配置</a></li>
+        <li data-menu="smsConfig"><a href="#" onclick="switchPage('smsConfig')"><i class="fa-solid fa-mobile-screen fa-fw"></i> 短信发送配置</a></li>
+        <li data-menu="fileStorageConfig"><a href="#" onclick="switchPage('fileStorageConfig')"><i class="fa-solid fa-hard-drive fa-fw"></i> 文件存储配置</a></li>
+        <li data-menu="dataBackup"><a href="#" onclick="switchPage('dataBackup')"><i class="fa-solid fa-database fa-fw"></i> 数据备份</a></li>
+      </ul>
+    </li>
+
+    <!-- 安全管理 -->
+    <li class="treeview" data-menu="securityMgmt">
+      <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-shield-halved fa-fw"></i> 安全管理 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
+      <ul class="treeview-menu">
+        <li data-menu="accessLog"><a href="#" onclick="switchPage('accessLog')"><i class="fa-solid fa-clock-rotate-left fa-fw"></i> 访问操作日志</a></li>
+        <li data-menu="watermark"><a href="#" onclick="switchPage('watermark')"><i class="fa-solid fa-droplet fa-fw"></i> 水印设置</a></li>
+        <li data-menu="encryption"><a href="#" onclick="switchPage('encryption')"><i class="fa-solid fa-lock fa-fw"></i> 加密设置</a></li>
+        <li data-menu="securityLevel"><a href="#" onclick="switchPage('securityLevel')"><i class="fa-solid fa-file-shield fa-fw"></i> 密级策略</a></li>
+        <li data-menu="riskStrategy"><a href="#" onclick="switchPage('riskStrategy')"><i class="fa-solid fa-shield-virus fa-fw"></i> 风控策略</a></li>
+      </ul>
+    </li>
+  </ul>
+</aside>
+
+<!-- ==================== 主内容区 ==================== -->
+<div class="main-wrapper" id="mainWrapper">
+  <!-- 顶部导航 -->
+  <nav class="navbar-top">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="切换侧边栏">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <ol class="breadcrumb-top">
+      <li><a href="#">首页</a></li>
+      <li><a href="#">合同管理</a></li>
+      <li class="active" id="breadcrumbCurrent">个人中心</li>
+    </ol>
+    <div class="navbar-right">
+      <span><i class="fa-regular fa-user"></i> 管理员</span>
+      <a href="#" style="color:#fff;"><i class="fa-solid fa-right-from-bracket"></i></a>
+    </div>
+  </nav>
+
+  <!-- 内容区 -->
+    <div class="content-area" id="contentArea">
+    <!-- ============ 首页看板（个人中心） ============ -->
+    <div id="pageDashboard">
+      <!-- 顶部统计卡片 -->
+      <div class="dashboard-stats">
+        <div class="stat-card" onclick="openDashDrawer('approving')" style="cursor:pointer;">
+          <div class="stat-icon orange"><i class="fa-solid fa-spinner"></i></div>
+          <div class="stat-label">审批中</div>
+          <div class="stat-value" id="dashApproving">0</div>
+          <div class="stat-change" style="color:var(--fa-warning);background:#FFF3E0;"><i class="fa-solid fa-clock"></i> 待处理</div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('myAudit')" style="cursor:pointer;">
+          <div class="stat-icon green"><i class="fa-solid fa-clipboard-list"></i></div>
+          <div class="stat-label">待我审批</div>
+          <div class="stat-value" id="dashMyAudit">0</div>
+          <div class="stat-change up"><i class="fa-solid fa-arrow-right"></i> <a href="#" onclick="switchPage('myAudit');return false;" style="color:var(--fa-success);">去处理</a></div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('draft')" style="cursor:pointer;">
+          <div class="stat-icon red"><i class="fa-solid fa-pen"></i></div>
+          <div class="stat-label">我的草稿</div>
+          <div class="stat-value" id="dashDrafts">0</div>
+          <div class="stat-change" style="color:var(--fa-info);background:var(--primary-light);"><i class="fa-solid fa-arrow-right"></i> <a href="#" onclick="switchPage('contractDraft');return false;" style="color:var(--fa-primary);">去起草</a></div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('collabTask')" style="cursor:pointer;">
+          <div class="stat-icon" style="background:#E3F2FD;color:#1565C0;"><i class="fa-solid fa-people-arrows"></i></div>
+          <div class="stat-label">协作任务</div>
+          <div class="stat-value" id="dashCollabTask">0</div>
+          <div class="stat-change" style="color:#1565C0;background:#E3F2FD;"><i class="fa-solid fa-list"></i> 列表</div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('borrow')" style="cursor:pointer;">
+          <div class="stat-icon" style="background:#E8F5E9;color:#2E7D32;"><i class="fa-solid fa-book-open-reader"></i></div>
+          <div class="stat-label">我的借阅</div>
+          <div class="stat-value" id="dashMyBorrow">0</div>
+          <div class="stat-change" style="color:#2E7D32;background:#E8F5E9;"><i class="fa-solid fa-list"></i> 列表</div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('favorite')" style="cursor:pointer;">
+          <div class="stat-icon" style="background:#FFF8E1;color:#F57F17;"><i class="fa-regular fa-star"></i></div>
+          <div class="stat-label">我的收藏</div>
+          <div class="stat-value" id="dashMyFavorite">0</div>
+          <div class="stat-change" style="color:#F57F17;background:#FFF8E1;"><i class="fa-solid fa-list"></i> 列表</div>
+        </div>
+      </div>
+
+      <!-- 左右双列布局 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+        <!-- 左列 -->
+        <div>
+          <!-- 待办事项 -->
+          <div class="chart-card" style="margin-bottom:16px;">
+            <div class="chart-card-title">
+              <span><i class="fa-solid fa-clipboard-list" style="color:var(--fa-warning);"></i> 待我审批</span>
+              <a href="#" onclick="switchPage('myAudit');return false;" style="font-size:12px;color:var(--fa-primary);">查看全部 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div id="dashTodoList" style="min-height:100px;">
+              <!-- JS动态渲染 -->
+            </div>
+          </div>
+
+          <!-- 我的草稿 -->
+          <div class="chart-card">
+            <div class="chart-card-title">
+              <span><i class="fa-solid fa-pen" style="color:var(--fa-primary);"></i> 我的草稿</span>
+              <a href="#" onclick="switchPage('contractDraft');return false;" style="font-size:12px;color:var(--fa-primary);">查看全部 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div id="dashDraftList" style="min-height:100px;">
+              <!-- JS动态渲染 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 右列 -->
+        <div>
+          <!-- 消息提醒 -->
+          <div class="chart-card" style="margin-bottom:16px;">
+            <div class="chart-card-title">
+              <span><i class="fa-solid fa-bell" style="color:var(--fa-danger);"></i> 消息提醒 <span id="dashMsgBadge" style="display:inline-block;background:var(--fa-danger);color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;vertical-align:middle;margin-left:4px;"></span></span>
+              <a href="#" onclick="switchPage('notifyRemind');return false;" style="font-size:12px;color:var(--fa-primary);">查看全部 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div id="dashNotifyList" style="min-height:100px;">
+              <!-- JS动态渲染 -->
+            </div>
+          </div>
+
+          <!-- 协作任务 -->
+          <div class="chart-card" style="margin-bottom:16px;">
+            <div class="chart-card-title">
+              <span><i class="fa-solid fa-people-arrows" style="color:#1565C0;"></i> 协作任务</span>
+            </div>
+            <div id="dashCollabTaskList" style="min-height:100px;">
+              <!-- JS动态渲染 -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============ 右侧抽屉弹框 ============ -->
+    <div class="dash-drawer-overlay" id="dashDrawerOverlay" onclick="closeDashDrawer()"></div>
+    <div class="dash-drawer" id="dashDrawer">
+      <div class="dash-drawer-header">
+        <h4 id="dashDrawerTitle"><i class="fa-solid fa-list"></i> 记录列表</h4>
+        <button class="dash-drawer-close" onclick="closeDashDrawer()">&times;</button>
+      </div>
+      <div class="dash-drawer-search">
+        <input type="text" class="form-control" id="dashDrawerSearch" placeholder="搜索..." oninput="renderDashDrawerList()">
+      </div>
+      <div class="dash-drawer-body" id="dashDrawerBody">
+        <!-- JS动态渲染 -->
+      </div>
+    </div>
+
+    <!-- ============ 合同列表页 ============ -->
+    <div id="pageContractList" style="display:none;">
+      <div class="page-header">
+        <h1>合同管理 <small>共 <span id="totalCount">28</span> 条记录</small></h1>
+        <div>
+          <div class="btn-group">
+            <button class="btn btn-success dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-file-import"></i> 批量导入 <span class="caret"></span></button>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <li><a href="#" onclick="switchPage('excelImport');return false;"><i class="fa-solid fa-file-excel" style="color:#217346;"></i> Excel模板导入</a></li>
+              <li><a href="#" onclick="switchPage('fileImport');return false;"><i class="fa-solid fa-cloud-arrow-up" style="color:var(--fa-primary);"></i> 合同文件导入</a></li>
+            </ul>
+          </div>
+          <button class="btn btn-default" onclick="refreshList()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+        </div>
+      </div>
+
+      <!-- 搜索工具栏 -->
+      <div class="search-toolbar">
+        <div class="row">
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+              <label>合同编号</label>
+              <input type="text" class="form-control" id="searchNo" placeholder="输入合同编号">
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+              <label>合同名称</label>
+              <input type="text" class="form-control" id="searchName" placeholder="输入合同名称">
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group">
+              <label>合同类型</label>
+              <select class="form-control" id="searchType">
+                <option value="">全部</option>
+                <option>采购合同</option>
+                <option>服务合同</option>
+                <option>合作协议</option>
+                <option>租赁合同</option>
+                <option>其他</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group">
+              <label>当前状态</label>
+              <select class="form-control" id="searchStatus" onchange="applyFilter()">
+                <option value="">全部</option>
+                <option value="draft">草稿</option>
+                <option value="approving">审批中</option>
+                <option value="approved">已通过</option>
+                <option value="rejected">已驳回</option>
+                <option value="sealing">用印签署中</option>
+                <option value="sealed">已签署</option>
+                <option value="archiving">归档中</option>
+                <option value="archived">已归档</option>
+                <option value="withdrawn">已撤回</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <div class="btn-search-group">
+                <button class="btn btn-primary btn-sm" onclick="applyFilter()"><i class="fa-solid fa-magnifying-glass"></i> 搜索</button>
+                <button class="btn btn-default btn-sm" onclick="resetFilter()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 数据表格 -->
+      <div class="fa-table-wrap">
+        <div class="table-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default btn-sm" onclick="exportData()"><i class="fa-solid fa-download"></i> 导出</button>
+          </div>
+          <div class="right-tools">
+            <div class="btn-group">
+              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                <i class="fa-solid fa-gear"></i> 列设置 <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#"><i class="fa-solid fa-check text-success"></i> 合同编号</a></li>
+                <li><a href="#"><i class="fa-solid fa-check text-success"></i> 合同名称</a></li>
+                <li><a href="#"><i class="fa-solid fa-check text-success"></i> 合同类别</a></li>
+                <li><a href="#"><i class="fa-solid fa-check text-success"></i> 合同状态</a></li>
+                <li><a href="#"><i class="fa-solid fa-check text-success"></i> 负责人</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-scroll-wrap">
+          <table class="table table-striped table-hover" id="contractTable">
+            <thead>
+              <tr>
+                <th class="fixed-col fixed-col-left-0" style="width:36px;"><input type="checkbox" id="checkAll" onchange="toggleCheckAll()"></th>
+                <th class="fixed-col fixed-col-left-1">Id</th>
+                <th class="fixed-col fixed-col-left-2">合同名称</th>
+                <th>合同编号</th>
+                <th>合同主体</th>
+                <th>合同类别</th>
+                <th>合同状态</th>
+                <th>期限类型</th>
+                <th>有效日期</th>
+                <th>签订日期</th>
+                <th>收支方向</th>
+                <th>计价方式</th>
+                <th>负责人</th>
+                <th>合同金额</th>
+                <th>已开票金额</th>
+                <th>差额</th>
+                <th>币种</th>
+                <th>签署部门</th>
+                <th>履约地点</th>
+                <th>合同概要</th>
+                <th>相对方</th>
+                <th>相对方联系人</th>
+                <th>相对方联系方式</th>
+                <th>相对方联系地址</th>
+                <th>生效日期</th>
+                <th>送达日期</th>
+                <th>合同总份数</th>
+                <th>归档份数</th>
+                <th>归档时间</th>
+                <th>归档位置</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+                <th class="fixed-col fixed-col-right" style="width:130px;">操作</th>
+              </tr>
+            </thead>
+            <tbody id="contractTableBody">
+              <!-- JS 动态渲染 -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination-wrap">
+          <div class="page-info">显示第 1 到 10 条，共 <span id="pageTotalCount">28</span> 条记录</div>
+          <ul class="pagination pagination-sm" id="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">&raquo;</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 合同模板页 ============ -->
+    <div id="pageContractTemplate" style="display:none;">
+      <div class="page-header">
+        <h1>合同模板 <small>共 <span id="templateTotalCount">0</span> 个模板</small></h1>
+        <div>
+          <button class="btn btn-primary" onclick="openCreateTemplate()"><i class="fa-solid fa-plus"></i> 新建模板</button>
+          <button class="btn btn-default" onclick="renderTemplateTable()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+        </div>
+      </div>
+      <div class="search-toolbar">
+        <div class="row">
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group"><label>模板名称</label><input type="text" class="form-control" id="templateSearchName" placeholder="输入模板名称"></div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group"><label>模板类型</label>
+              <select class="form-control" id="templateSearchType"><option value="">全部</option><option>采购合同</option><option>服务合同</option><option>合作协议</option><option>租赁合同</option><option>其他</option></select>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group"><label>状态</label>
+              <select class="form-control" id="templateSearchStatus"><option value="">全部</option><option value="1">启用</option><option value="0">停用</option></select>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group"><label>&nbsp;</label>
+              <div class="btn-search-group">
+                <button class="btn btn-primary btn-sm" onclick="applyTemplateFilter()"><i class="fa-solid fa-magnifying-glass"></i> 搜索</button>
+                <button class="btn btn-default btn-sm" onclick="resetTemplateFilter()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fa-table-wrap">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th style="width:36px;"><input type="checkbox" id="templateCheckAll" onchange="toggleTemplateCheckAll()"></th>
+                <th>模板名称</th>
+                <th>模板类型</th>
+                <th>适用类别</th>
+                <th>适用部门</th>
+                <th>状态</th>
+                <th>使用次数</th>
+                <th>更新时间</th>
+                <th style="width:260px;">操作</th>
+              </tr>
+            </thead>
+            <tbody id="templateTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 模板富文本编辑页 ============ -->
+    <div id="pageTemplateEditor" style="display:none;">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-pen-nib" style="color:var(--fa-primary);"></i> <span id="templateEditorTitle">编辑合同模板</span></h1>
+        <div>
+          <button class="btn btn-default" onclick="backToTemplateList()"><i class="fa-solid fa-arrow-left"></i> 返回模板列表</button>
+          <button class="btn btn-primary" onclick="saveTemplateFromEditor()"><i class="fa-solid fa-check"></i> 保存模板</button>
+        </div>
+      </div>
+
+      <!-- 隐藏字段：模板基本信息（已在新建/编辑弹框中填写） -->
+      <input type="hidden" id="editorTemplateName">
+      <input type="hidden" id="editorTemplateType">
+      <input type="hidden" id="editorTemplateCategory">
+      <input type="hidden" id="editorTemplateDept">
+      <input type="hidden" id="editorTemplateDesc">
+
+      <!-- 富文本编辑器工具栏 -->
+      <div style="background:#fff;border-radius:10px 10px 0 0;padding:10px 15px;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-bottom:1px solid #E8ECF0;">
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group" style="margin-right:8px;">
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('bold')" title="加粗"><i class="fa-solid fa-bold"></i></button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('italic')" title="斜体"><i class="fa-solid fa-italic"></i></button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('underline')" title="下划线"><i class="fa-solid fa-underline"></i></button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('strikeThrough')" title="删除线"><i class="fa-solid fa-strikethrough"></i></button>
+          </div>
+          <div class="btn-group" style="margin-right:8px;">
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('formatBlock','<h1>')" title="标题1" style="font-weight:bold;font-size:14px;">H1</button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('formatBlock','<h2>')" title="标题2" style="font-weight:bold;font-size:13px;">H2</button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('formatBlock','<h3>')" title="标题3" style="font-weight:bold;font-size:12px;">H3</button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('formatBlock','<p>')" title="正文" style="font-size:12px;">P</button>
+          </div>
+          <div class="btn-group" style="margin-right:8px;">
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('justifyLeft')" title="左对齐"><i class="fa-solid fa-align-left"></i></button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('justifyCenter')" title="居中"><i class="fa-solid fa-align-center"></i></button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('justifyRight')" title="右对齐"><i class="fa-solid fa-align-right"></i></button>
+          </div>
+          <div class="btn-group" style="margin-right:8px;">
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('insertUnorderedList')" title="无序列表"><i class="fa-solid fa-list-ul"></i></button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('insertOrderedList')" title="有序列表"><i class="fa-solid fa-list-ol"></i></button>
+          </div>
+          <div class="btn-group" style="margin-right:8px;">
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('indent')" title="增加缩进"><i class="fa-solid fa-indent"></i></button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('outdent')" title="减少缩进"><i class="fa-solid fa-outdent"></i></button>
+          </div>
+          <div class="btn-group" style="margin-right:8px;">
+            <button class="btn btn-default btn-sm" onclick="templateEditorInsertTable()" title="插入表格"><i class="fa-solid fa-table"></i></button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorInsertHR()" title="插入分隔线"><i class="fa-solid fa-minus"></i></button>
+          </div>
+          <div class="btn-group" style="margin-right:8px;">
+            <button class="btn btn-default btn-sm" onclick="templateEditorInsertVar()" title="插入变量" style="color:var(--fa-primary);"><i class="fa-solid fa-code"></i> 变量</button>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('undo')" title="撤销"><i class="fa-solid fa-rotate-left"></i></button>
+            <button class="btn btn-default btn-sm" onclick="templateEditorCmd('redo')" title="重做"><i class="fa-solid fa-rotate-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 富文本编辑区域 -->
+      <div style="background:#fff;border-radius:0 0 10px 10px;padding:0;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:16px;">
+        <div id="templateRichEditor" contenteditable="true" style="min-height:500px;max-height:65vh;overflow-y:auto;padding:25px 30px;font-size:14px;line-height:1.8;color:#333;outline:none;" oninput="onTemplateEditorInput()">
+          <h2 style="text-align:center;color:#333;margin-bottom:20px;">合同模板标题</h2>
+          <p style="text-align:center;color:#888;font-size:12px;margin-bottom:20px;">合同类型：________ &nbsp;|&nbsp; 模板创建时间：________</p>
+          <h3 style="color:var(--fa-primary);margin:16px 0 10px;">第一条 合同主体</h3>
+          <p>甲方：{{partyA}}</p>
+          <p>乙方：{{partyB}}</p>
+          <h3 style="color:var(--fa-primary);margin:16px 0 10px;">第二条 合同标的</h3>
+          <p><span style="color:#999;font-style:italic;">（请编辑填写合同标的物信息）</span></p>
+          <h3 style="color:var(--fa-primary);margin:16px 0 10px;">第三条 合同金额与支付</h3>
+          <p>本合同总金额为人民币 {{amount}} 元。</p>
+          <h3 style="color:var(--fa-primary);margin:16px 0 10px;">第四条 交付与验收</h3>
+          <p><span style="color:#999;font-style:italic;">（请编辑填写交付与验收条款）</span></p>
+          <h3 style="color:var(--fa-primary);margin:16px 0 10px;">第五条 违约责任</h3>
+          <p><span style="color:#999;font-style:italic;">（请编辑填写违约责任条款）</span></p>
+          <h3 style="color:var(--fa-primary);margin:16px 0 10px;">第六条 争议解决</h3>
+          <p>因本合同引起的争议，双方应协商解决；协商不成的，任何一方均可向甲方所在地人民法院提起诉讼。</p>
+          <div style="margin-top:40px;display:flex;justify-content:space-between;">
+            <div><p><strong>甲方（盖章）：</strong>{{partyA}}</p><p style="margin-top:30px;">授权代表签字：_______________</p><p>日期：_______________</p></div>
+            <div><p><strong>乙方（盖章）：</strong>{{partyB}}</p><p style="margin-top:30px;">授权代表签字：_______________</p><p>日期：_______________</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 变量提示 -->
+      <div style="background:#FFF9E6;border:1px solid #FFE082;border-radius:8px;padding:12px 16px;font-size:12px;color:#8D6E00;">
+        <i class="fa-solid fa-lightbulb" style="color:#FFC107;"></i>
+        <strong>提示：</strong>使用 <code style="background:#FFF3CD;padding:1px 4px;border-radius:3px;">{{变量名}}</code> 标记可替换字段，创建合同时系统将自动提示填写。常用变量：
+        <code>{{partyA}}</code> 甲方、
+        <code>{{partyB}}</code> 乙方、
+        <code>{{amount}}</code> 金额、
+        <code>{{startDate}}</code> 起始日期、
+        <code>{{endDate}}</code> 截止日期
+      </div>
+    </div>
+
+    <!-- ============ 合同起草页 ============ -->
+    <div id="pageContractDraft" style="display:none;">
+      <div class="page-header">
+        <h1>合同起草 <small>共 <span id="draftTotalCount">0</span> 条起草记录</small></h1>
+        <div>
+          <button class="btn btn-primary" onclick="openCreateContract()"><i class="fa-solid fa-plus"></i> 新建合同</button>
+          <button class="btn btn-default" onclick="renderDraftTable()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+        </div>
+      </div>
+
+      <!-- 搜索工具栏 -->
+      <div class="search-toolbar">
+        <div class="row">
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group">
+              <label>合同名称</label>
+              <input type="text" class="form-control" id="draftSearchName" placeholder="输入合同名称">
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group">
+              <label>合同编号</label>
+              <input type="text" class="form-control" id="draftSearchNo" placeholder="输入合同编号">
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group">
+              <label>合同类别</label>
+              <select class="form-control" id="draftSearchType">
+                <option value="">全部</option>
+                <option>采购合同</option>
+                <option>服务合同</option>
+                <option>合作协议</option>
+                <option>租赁合同</option>
+                <option>其他</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group">
+              <label>合同状态</label>
+              <select class="form-control" id="draftSearchStatus">
+                <option value="">全部</option>
+                <option value="draft">草稿</option>
+                <option value="approving">审核中</option>
+                <option value="approved">已通过</option>
+                <option value="rejected">已驳回</option>
+                <option value="withdrawn">已撤销</option>
+                <option value="pendingSign">待签署</option>
+                <option value="signing">签署中</option>
+                <option value="sealed">已签署</option>
+                <option value="rejectedSign">已拒签</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <div class="btn-search-group">
+                <button class="btn btn-primary btn-sm" onclick="applyDraftFilter()"><i class="fa-solid fa-magnifying-glass"></i> 搜索</button>
+                <button class="btn btn-default btn-sm" onclick="resetDraftFilter()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 起草记录表格 -->
+      <div class="fa-table-wrap">
+        <div class="table-toolbar">
+          <div class="right-tools">
+            <span class="text-muted" style="font-size:12px;"><i class="fa-solid fa-circle-info"></i> 显示全部合同，可按状态筛选</span>
+          </div>
+        </div>
+        <div class="table-scroll-wrap">
+          <table class="table table-striped table-hover" id="draftTable">
+            <thead>
+              <tr>
+                <th style="width:36px;"><input type="checkbox" id="draftCheckAll" onchange="toggleDraftCheckAll()"></th>
+                <th>Id</th>
+                <th>合同名称</th>
+                <th>合同编号</th>
+                <th>合同主体</th>
+                <th>合同类别</th>
+                <th>合同状态</th>
+                <th>负责人</th>
+                <th>合同金额</th>
+                <th>相对方</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+                <th style="width:260px;">操作</th>
+              </tr>
+            </thead>
+            <tbody id="draftTableBody">
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination-wrap">
+          <div class="page-info">显示第 1 到 10 条，共 <span id="draftPageTotalCount">0</span> 条记录</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 合同详情页 ============ -->
+    <div id="pageContractDetail" style="display:none;">
+      <div class="page-header">
+        <h1>
+          <button class="btn btn-default btn-sm" onclick="backToList()" style="margin-right:10px;"><i class="fa-solid fa-arrow-left"></i></button>
+          合同详情
+          <small id="detailContractNo">HT-2026-0001</small>
+        </h1>
+        <div id="detailHeaderActions">
+          <button class="btn btn-success btn-sm" id="btnDetailEdit" onclick="editContract(currentContractId)"><i class="fa-solid fa-pen-to-square"></i> 编辑</button>
+        </div>
+      </div>
+
+      <!-- Tab 导航 -->
+      <div class="nav-tabs-custom" style="margin-bottom:0;">
+        <ul class="nav nav-tabs" id="detailTabs">
+          <li class="active"><a href="#tabBasicInfo" data-toggle="tab">基本信息</a></li>
+          <li><a href="#tabContractContent" data-toggle="tab">合同内容</a></li>
+          <li><a href="#tabSubject" data-toggle="tab">标的物</a></li>
+          <li><a href="#tabPerformance" data-toggle="tab">履约信息</a></li>
+          <li><a href="#tabAuditRecord" data-toggle="tab">审核记录</a></li>
+          <li><a href="#tabChangeRecord" data-toggle="tab">变更记录</a></li>
+          <li><a href="#tabInvoice" data-toggle="tab">发票信息</a></li>
+        </ul>
+        <div class="tab-content">
+
+          <!-- 基本信息 Tab -->
+          <div class="tab-pane active" id="tabBasicInfo">
+            <div class="box-body">
+              <h4 style="color:var(--fa-primary);border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:15px;"><i class="fa-solid fa-file-contract"></i> 合同基础信息</h4>
+              <div class="detail-info">
+                <div class="info-row"><span class="info-label">合同编号：</span><span class="info-value" id="infoNo">—</span></div>
+                <div class="info-row"><span class="info-label">合同名称：</span><span class="info-value" id="infoName">—</span></div>
+                <div class="info-row"><span class="info-label">合同主体：</span><span class="info-value" id="infoSubject">—</span></div>
+                <div class="info-row"><span class="info-label">合同类别：</span><span class="info-value" id="infoCategory">—</span></div>
+                <div class="info-row"><span class="info-label">合同状态：</span><span class="info-value"><span class="status-badge" id="infoStatus">—</span></span></div>
+                <div class="info-row"><span class="info-label">期限类型：</span><span class="info-value" id="infoTermType">—</span></div>
+                <div class="info-row"><span class="info-label">有效日期：</span><span class="info-value" id="infoValidDate">—</span></div>
+                <div class="info-row"><span class="info-label">签订日期：</span><span class="info-value" id="infoSignDate">—</span></div>
+                <div class="info-row"><span class="info-label">收支方向：</span><span class="info-value" id="infoDirection">—</span></div>
+                <div class="info-row"><span class="info-label">计价方式：</span><span class="info-value" id="infoPricingMethod">—</span></div>
+                <div class="info-row"><span class="info-label">负责人：</span><span class="info-value" id="infoHandler">—</span></div>
+                <div class="info-row"><span class="info-label">合同金额：</span><span class="info-value" style="color:var(--fa-danger);font-weight:600;" id="infoAmount">—</span></div>
+                <div class="info-row"><span class="info-label">已开票金额：</span><span class="info-value" style="color:var(--fa-warning);font-weight:600;" id="infoInvoiced">—</span></div>
+                <div class="info-row"><span class="info-label">差额：</span><span class="info-value" style="font-weight:600;" id="infoInvoiceDiff">—</span></div>
+                <div class="info-row"><span class="info-label">开票进度：</span><span class="info-value" id="infoInvoiceProgress">—</span></div>
+                <div class="info-row"><span class="info-label">币种：</span><span class="info-value" id="infoCurrency">—</span></div>
+                <div class="info-row"><span class="info-label">签署部门：</span><span class="info-value" id="infoSignDept">—</span></div>
+                <div class="info-row"><span class="info-label">合同概要：</span><span class="info-value" id="infoSummary">—</span></div>
+                <div class="info-row"><span class="info-label">合同附件：</span><span class="info-value" id="infoAttachment"><span id="infoAttachmentName" style="color:#999;">暂无附件</span><a id="infoAttachmentLink" href="javascript:void(0)" style="display:none;margin-left:8px;color:var(--fa-primary);text-decoration:none;" onclick="downloadContractAttachment(currentContractId)" title="下载附件"><i class="fa-solid fa-file-pdf" id="infoAttachmentIcon"></i> <span id="infoAttachmentText"></span> <i class="fa-solid fa-download" style="font-size:11px;"></i></a></span></div>
+              </div>
+
+              <h4 style="color:var(--fa-primary);border-bottom:1px solid #eee;padding-bottom:8px;margin:20px 0 15px;"><i class="fa-solid fa-building"></i> 相对方信息</h4>
+              <div class="detail-info">
+                <div class="info-row"><span class="info-label">相对方：</span><span class="info-value" id="infoCounterParty">—</span></div>
+                <div class="info-row"><span class="info-label">相对方联系人：</span><span class="info-value" id="infoCounterContact">—</span></div>
+                <div class="info-row"><span class="info-label">相对方联系方式：</span><span class="info-value" id="infoCounterPhone">—</span></div>
+                <div class="info-row"><span class="info-label">相对方联系地址：</span><span class="info-value" id="infoCounterAddress">—</span></div>
+              </div>
+
+              <h4 style="color:var(--fa-primary);border-bottom:1px solid #eee;padding-bottom:8px;margin:20px 0 15px;"><i class="fa-solid fa-clock"></i> 时间与归档信息</h4>
+              <div class="detail-info">
+                <div class="info-row"><span class="info-label">生效日期：</span><span class="info-value" id="infoEffectiveDate">—</span></div>
+                <div class="info-row"><span class="info-label">送达日期：</span><span class="info-value" id="infoDeliveryDate">—</span></div>
+                <div class="info-row"><span class="info-label">合同总份数：</span><span class="info-value" id="infoTotalCopies">—</span></div>
+                <div class="info-row"><span class="info-label">归档份数：</span><span class="info-value" id="infoArchiveCopies">—</span></div>
+                <div class="info-row"><span class="info-label">归档时间：</span><span class="info-value" id="infoArchiveTime">—</span></div>
+                <div class="info-row"><span class="info-label">归档位置：</span><span class="info-value" id="infoArchiveLocation">—</span></div>
+                <div class="info-row"><span class="info-label">创建时间：</span><span class="info-value" id="infoCreateTime">—</span></div>
+                <div class="info-row"><span class="info-label">更新时间：</span><span class="info-value" id="infoUpdateTime">—</span></div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 合同内容 Tab -->
+          <div class="tab-pane" id="tabContractContent">
+            <div class="box-body" style="position:relative;padding:0;">
+              <!-- 主内容区 -->
+              <div id="contractContentMain" style="transition:margin-right 0.3s ease;">
+                <div style="padding:15px 20px 0;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h4 style="color:var(--fa-primary);margin:0;"><i class="fa-solid fa-file-lines"></i> 合同内容</h4>
+                    <button class="btn btn-default btn-sm" onclick="toggleVersionDrawer()" id="btnVersionDrawer" title="版本记录"><i class="fa-solid fa-clock-rotate-left"></i> 版本记录</button>
+                  </div>
+                </div>
+                <div id="contractContentView" style="background:#FAFBFC;border:1px solid #E8ECF0;border-radius:6px;padding:32px 40px;line-height:1.8;font-size:14px;color:#333;min-height:200px;max-height:calc(100vh - 320px);overflow-y:auto;margin:0 20px 20px;">
+                  <span style="color:#999;">暂无合同内容，请通过编辑功能添加</span>
+                </div>
+              </div>
+              <!-- 右侧版本抽屉 -->
+              <div id="versionDrawer" style="position:absolute;top:0;right:0;width:380px;height:100%;background:#fff;border-left:1px solid #E8ECF0;box-shadow:-4px 0 16px rgba(0,0,0,0.06);transform:translateX(100%);transition:transform 0.3s ease;z-index:10;display:flex;flex-direction:column;">
+                <div style="padding:16px 20px;border-bottom:1px solid #E8ECF0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+                  <h5 style="margin:0;color:var(--fa-purple);font-weight:600;"><i class="fa-solid fa-clock-rotate-left"></i> 版本记录 <span id="detailVersionCount" style="font-size:12px;color:#999;font-weight:400;"></span></h5>
+                  <button style="background:none;border:none;font-size:18px;color:#999;cursor:pointer;padding:0 4px;line-height:1;" onclick="toggleVersionDrawer()" title="关闭">&times;</button>
+                </div>
+                <div id="detailVersionList" style="flex:1;overflow-y:auto;padding:12px 16px;">
+                  <span style="color:#999;font-size:13px;">暂无版本记录</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 标的物 Tab -->
+          <div class="tab-pane" id="tabSubject">
+            <div class="box-body">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                <h4 style="color:var(--fa-primary);margin:0;"><i class="fa-solid fa-boxes-stacked"></i> 合同标的物</h4>
+                <button class="btn btn-primary btn-xs" onclick="alert('添加标的物功能开发中')"><i class="fa-solid fa-plus"></i> 添加</button>
+              </div>
+              <table class="table table-bordered" style="font-size:13px;">
+                <thead>
+                  <tr>
+                    <th>序号</th>
+                    <th>标的物名称</th>
+                    <th>规格型号</th>
+                    <th>数量</th>
+                    <th>单位</th>
+                    <th>单价(元)</th>
+                    <th>金额(元)</th>
+                    <th>备注</th>
+                  </tr>
+                </thead>
+                <tbody id="subjectTableBody">
+                  <!-- JS动态渲染 -->
+                </tbody>
+              </table>
+              <div style="text-align:right;padding:10px 0;font-size:13px;">
+                <strong>标的物合计金额：</strong><span style="color:var(--fa-danger);font-size:16px;font-weight:600;" id="subjectTotalAmount">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 履约信息 Tab -->
+          <div class="tab-pane" id="tabPerformance">
+            <div class="box-body">
+              <h4 style="color:var(--fa-primary);border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:15px;"><i class="fa-solid fa-handshake"></i> 履约基本信息</h4>
+              <div class="detail-info">
+                <div class="info-row"><span class="info-label">履约地点：</span><span class="info-value" id="infoPerformPlace">—</span></div>
+                <div class="info-row"><span class="info-label">有效日期：</span><span class="info-value" id="infoPerformValidDate">—</span></div>
+                <div class="info-row"><span class="info-label">签订日期：</span><span class="info-value" id="infoPerformSignDate">—</span></div>
+                <div class="info-row"><span class="info-label">生效日期：</span><span class="info-value" id="infoPerformEffectiveDate">—</span></div>
+                <div class="info-row"><span class="info-label">送达日期：</span><span class="info-value" id="infoPerformDeliveryDate">—</span></div>
+                <div class="info-row"><span class="info-label">收支方向：</span><span class="info-value" id="infoPerformDirection">—</span></div>
+                <div class="info-row"><span class="info-label">计价方式：</span><span class="info-value" id="infoPerformPricingMethod">—</span></div>
+                <div class="info-row"><span class="info-label">合同金额：</span><span class="info-value" style="color:var(--fa-danger);font-weight:600;" id="infoPerformAmount">—</span></div>
+                <div class="info-row"><span class="info-label">已开票金额：</span><span class="info-value" style="color:var(--fa-warning);font-weight:600;" id="infoPerformInvoiced">—</span></div>
+                <div class="info-row"><span class="info-label">差额：</span><span class="info-value" style="font-weight:600;" id="infoPerformDiff">—</span></div>
+                <div class="info-row"><span class="info-label">币种：</span><span class="info-value" id="infoPerformCurrency">—</span></div>
+              </div>
+
+              <h4 style="color:var(--fa-primary);border-bottom:1px solid #eee;padding-bottom:8px;margin:20px 0 15px;"><i class="fa-solid fa-truck"></i> 付款/交付计划</h4>
+              <table class="table table-bordered" style="font-size:13px;">
+                <thead>
+                  <tr>
+                    <th>期次</th>
+                    <th>计划日期</th>
+                    <th>金额(元)</th>
+                    <th>比例</th>
+                    <th>状态</th>
+                    <th>备注</th>
+                  </tr>
+                </thead>
+                <tbody id="paymentPlanBody">
+                  <!-- JS动态渲染 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 审核记录 Tab -->
+          <div class="tab-pane" id="tabAuditRecord">
+            <div class="box-body">
+              <div id="auditFlowOverview"></div>
+              <h4 style="color:var(--fa-primary);border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:15px;margin-top:20px;"><i class="fa-solid fa-clock-rotate-left"></i> 审核流程记录</h4>
+              <div id="approvalTimeline">
+                <!-- JS动态渲染 -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 变更记录 Tab -->
+          <div class="tab-pane" id="tabChangeRecord">
+            <div class="box-body">
+              <h4 style="color:var(--fa-primary);border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:15px;"><i class="fa-solid fa-code-compare"></i> 合同变更记录</h4>
+              <table class="table table-bordered" style="font-size:13px;">
+                <thead>
+                  <tr>
+                    <th>变更时间</th>
+                    <th>变更人</th>
+                    <th>变更字段</th>
+                    <th>变更前</th>
+                    <th>变更后</th>
+                    <th>变更原因</th>
+                  </tr>
+                </thead>
+                <tbody id="changeRecordBody">
+                  <!-- JS动态渲染 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 发票信息 Tab -->
+          <div class="tab-pane" id="tabInvoice">
+            <div class="box-body">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                <h4 style="color:var(--fa-primary);margin:0;"><i class="fa-solid fa-file-invoice"></i> 关联发票</h4>
+                <button class="btn btn-primary btn-sm" onclick="openInvoiceUploadModal()"><i class="fa-solid fa-cloud-arrow-up"></i> 上传发票</button>
+              </div>
+
+              <!-- 发票统计 -->
+              <div class="invoice-stats-row">
+                <div class="inv-stat-card">
+                  <div class="inv-stat-icon" style="background:#E8F5E9;color:#2E7D32;"><i class="fa-solid fa-file-invoice"></i></div>
+                  <div class="inv-stat-info">
+                    <div class="inv-stat-value" id="detailInvoiceCount">0</div>
+                    <div class="inv-stat-label">关联发票数</div>
+                  </div>
+                </div>
+                <div class="inv-stat-card">
+                  <div class="inv-stat-icon" style="background:#FFF3E0;color:#E65100;"><i class="fa-solid fa-money-bill-wave"></i></div>
+                  <div class="inv-stat-info">
+                    <div class="inv-stat-value" id="detailInvoiceAmount">¥ 0</div>
+                    <div class="inv-stat-label">发票总金额</div>
+                  </div>
+                </div>
+                <div class="inv-stat-card">
+                  <div class="inv-stat-icon" style="background:#E3F2FD;color:#1565C0;"><i class="fa-solid fa-coins"></i></div>
+                  <div class="inv-stat-info">
+                    <div class="inv-stat-value" id="detailContractAmount">¥ 0</div>
+                    <div class="inv-stat-label">合同金额</div>
+                  </div>
+                </div>
+                <div class="inv-stat-card">
+                  <div class="inv-stat-icon" style="background:#F3E5F5;color:#7B1FA2;"><i class="fa-solid fa-chart-pie"></i></div>
+                  <div class="inv-stat-info">
+                    <div class="inv-stat-value" id="detailInvoiceRatio">0%</div>
+                    <div class="inv-stat-label">开票比例</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 发票列表 -->
+              <table class="table table-bordered table-hover" style="font-size:13px;margin-top:15px;">
+                <thead>
+                  <tr style="background:#F4F6F9;">
+                    <th style="width:40px;">序号</th>
+                    <th>发票号码</th>
+                    <th>发票类型</th>
+                    <th>开票日期</th>
+                    <th>发票金额</th>
+                    <th>税额</th>
+                    <th>价税合计</th>
+                    <th>开票方</th>
+                    <th>状态</th>
+                    <th style="width:120px;">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="detailInvoiceBody">
+                  <!-- JS动态渲染 -->
+                </tbody>
+              </table>
+              <div id="detailInvoiceEmpty" style="display:none;text-align:center;padding:40px;color:#999;">
+                <i class="fa-solid fa-file-circle-xmark" style="font-size:36px;display:block;margin-bottom:8px;"></i>
+                暂无关联发票，点击上方按钮上传
+              </div>
+            </div>
+          </div>
+        </div><!-- /tab-content -->
+      </div><!-- /nav-tabs-custom -->
+    </div><!-- /pageContractDetail -->
+
+  <!-- ============ 发票管理页 ============ -->
+  <div id="pageInvoice" style="display:none;">
+    <div class="page-header">
+      <h1>
+        <i class="fa-solid fa-file-invoice" style="color:var(--fa-warning);margin-right:8px;"></i> 发票管理 <small>财务线下开票后上传，并关联已有合同</small>
+      </h1>
+      <div>
+        <button class="btn btn-primary" onclick="openInvoiceUploadModal()"><i class="fa-solid fa-cloud-arrow-up"></i> 上传发票</button>
+        <button class="btn btn-default" onclick="refreshInvoiceList()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+      </div>
+    </div>
+
+    <!-- 发票统计卡片 -->
+    <div class="row" style="margin-bottom:20px;">
+      <div class="col-md-3">
+        <div class="fa-box info" style="border-top-color:var(--fa-warning);">
+          <div class="box-body" style="text-align:center;padding:15px;">
+            <i class="fa-solid fa-file-invoice" style="font-size:28px;color:var(--fa-warning);"></i>
+            <h3 style="margin:8px 0 4px;font-size:24px;color:var(--fa-warning);" id="invStatTotal">0</h3>
+            <small style="color:#888;">发票总数</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="fa-box success" style="border-top-color:var(--fa-success);">
+          <div class="box-body" style="text-align:center;padding:15px;">
+            <i class="fa-solid fa-link" style="font-size:28px;color:var(--fa-success);"></i>
+            <h3 style="margin:8px 0 4px;font-size:24px;color:var(--fa-success);" id="invStatLinked">0</h3>
+            <small style="color:#888;">已关联合同</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="fa-box danger" style="border-top-color:var(--fa-danger);">
+          <div class="box-body" style="text-align:center;padding:15px;">
+            <i class="fa-solid fa-money-bill-wave" style="font-size:28px;color:var(--fa-danger);"></i>
+            <h3 style="margin:8px 0 4px;font-size:24px;color:var(--fa-danger);" id="invStatAmount">¥ 0</h3>
+            <small style="color:#888;">发票总金额</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="fa-box purple" style="border-top-color:#7B1FA2;">
+          <div class="box-body" style="text-align:center;padding:15px;">
+            <i class="fa-solid fa-clock" style="font-size:28px;color:#7B1FA2;"></i>
+            <h3 style="margin:8px 0 4px;font-size:24px;color:#7B1FA2;" id="invStatPending">0</h3>
+            <small style="color:#888;">待关联</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 搜索工具栏 -->
+    <div class="search-toolbar" style="margin-bottom:15px;">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="input-group" style="width:100%;">
+            <input type="text" class="form-control" id="invSearchKeyword" placeholder="搜索发票号码、开票方..." oninput="filterInvoiceList()">
+            <span class="input-group-addon"><i class="fa-solid fa-search"></i></span>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <select class="form-control" id="invSearchType" onchange="filterInvoiceList()">
+            <option value="">全部类型</option>
+            <option value="增值税专用发票">增值税专用发票</option>
+            <option value="增值税普通发票">增值税普通发票</option>
+            <option value="电子发票">电子发票</option>
+            <option value="收据">收据</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select class="form-control" id="invSearchStatus" onchange="filterInvoiceList()">
+            <option value="">全部状态</option>
+            <option value="linked">已关联</option>
+            <option value="unlinked">待关联</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <input type="month" class="form-control" id="invSearchMonth" onchange="filterInvoiceList()" style="font-size:13px;">
+        </div>
+        <div class="col-md-3" style="text-align:right;">
+          <button class="btn btn-danger btn-sm" id="invBatchDeleteBtn" onclick="showInvoiceBatchDeleteConfirm()" disabled style="opacity:0.5;"><i class="fa-solid fa-trash-can"></i> 批量删除</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 发票列表 -->
+    <div class="fa-box">
+      <div class="box-body" style="padding:0;">
+        <table class="table table-striped table-hover" style="font-size:13px;margin-bottom:0;">
+          <thead>
+            <tr style="background:#F4F6F9;">
+              <th style="width:36px;"><input type="checkbox" id="invCheckAll" onchange="toggleInvoiceCheckAll()"></th>
+              <th>发票号码</th>
+              <th>发票类型</th>
+              <th>开票日期</th>
+              <th>发票金额</th>
+              <th>税额</th>
+              <th>价税合计</th>
+              <th>开票方</th>
+              <th>关联合同</th>
+              <th>状态</th>
+              <th style="width:140px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="invoiceTableBody">
+            <!-- JS动态渲染 -->
+          </tbody>
+        </table>
+        <div id="invoiceTableEmpty" style="display:none;text-align:center;padding:50px;color:#999;">
+          <i class="fa-solid fa-file-circle-xmark" style="font-size:40px;display:block;margin-bottom:10px;"></i>
+          暂无发票记录
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 发票上传弹框 ============ -->
+  <div class="invoice-upload-overlay" id="invoiceUploadModal" style="display:none;">
+    <div class="invoice-upload-dialog">
+      <div class="iud-header">
+        <h3><i class="fa-solid fa-cloud-arrow-up"></i> 上传发票</h3>
+        <button class="iud-close" onclick="closeInvoiceUploadModal()" title="关闭">&times;</button>
+      </div>
+      <div class="iud-body">
+        <!-- 步骤指示 -->
+        <div class="iud-steps">
+          <div class="iud-step active" id="invStep1"><span class="iud-step-num">1</span><span class="iud-step-text">上传文件</span></div>
+          <div class="iud-step-line" id="invStepLine1"></div>
+          <div class="iud-step" id="invStep2"><span class="iud-step-num">2</span><span class="iud-step-text">填写信息并关联</span></div>
+        </div>
+
+        <!-- 步骤1：上传文件 -->
+        <div id="invUploadStep1">
+          <div class="iud-upload-zone" id="invoiceUploadZone" onclick="document.getElementById('invoiceFileInput').click();"
+               ondragover="event.preventDefault();this.classList.add('dragover');"
+               ondragleave="this.classList.remove('dragover');"
+               ondrop="event.preventDefault();this.classList.remove('dragover');handleInvoiceFileDrop(event);">
+            <div class="iud-upload-icon"><i class="fa-solid fa-file-invoice"></i></div>
+            <div class="iud-upload-title">将发票文件拖拽到此处，或 <span style="color:var(--fa-primary);font-weight:600;">点击上传</span></div>
+            <div class="iud-upload-hint">支持 PDF、JPG、PNG 格式，单个文件不超过20MB</div>
+          </div>
+          <input type="file" id="invoiceFileInput" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="handleInvoiceFileSelect(this)">
+
+          <!-- 已上传文件 -->
+          <div id="invoiceUploadedFile" style="display:none;margin-top:12px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FFF8;border:1px solid #C8E6C9;border-radius:6px;">
+              <i class="fa-solid fa-file-image" style="font-size:24px;color:#4CAF50;"></i>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:500;" id="invFileName">—</div>
+                <div style="font-size:11px;color:#999;" id="invFileSize">—</div>
+              </div>
+              <span class="status-badge status-approved" style="font-size:11px;">已上传</span>
+              <button style="background:none;border:none;color:#999;cursor:pointer;font-size:16px;" onclick="removeInvoiceFile()" title="移除文件"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+
+          <div style="text-align:right;margin-top:15px;">
+            <button class="btn btn-default btn-sm" onclick="closeInvoiceUploadModal()">取消</button>
+            <button class="btn btn-primary btn-sm" id="invNextStep1" onclick="goInvoiceStep(2)" disabled>下一步 <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- 步骤2：填写发票信息 -->
+        <div id="invUploadStep2" style="display:none;">
+          <div class="iud-form">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label><span class="text-danger">*</span> 发票号码</label>
+                  <input type="text" class="form-control" id="invFormNo" placeholder="请输入发票号码">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label><span class="text-danger">*</span> 发票类型</label>
+                  <select class="form-control" id="invFormType">
+                    <option value="">请选择</option>
+                    <option value="增值税专用发票">增值税专用发票</option>
+                    <option value="增值税普通发票">增值税普通发票</option>
+                    <option value="电子发票">电子发票</option>
+                    <option value="收据">收据</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label><span class="text-danger">*</span> 开票日期</label>
+                  <input type="date" class="form-control" id="invFormDate">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>开票方</label>
+                  <input type="text" class="form-control" id="invFormIssuer" placeholder="请输入开票方名称">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label><span class="text-danger">*</span> 发票金额（不含税）</label>
+                  <input type="number" class="form-control" id="invFormAmount" placeholder="0.00" oninput="calcInvoiceTotal()">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>税率(%)</label>
+                  <input type="number" class="form-control" id="invFormTaxRate" value="6" oninput="calcInvoiceTotal()">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>税额</label>
+                  <input type="number" class="form-control" id="invFormTax" readonly style="background:#F5F5F5;">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>价税合计</label>
+                  <input type="text" class="form-control" id="invFormTotal" readonly style="background:#F5F5F5;font-weight:600;color:var(--fa-danger);">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>备注</label>
+                  <input type="text" class="form-control" id="invFormRemark" placeholder="选填">
+                </div>
+              </div>
+            </div>
+          </div>
+            <!-- 关联合同 -->
+            <div class="form-group" style="margin-top:15px;padding-top:15px;border-top:1px solid #E8E8E8;">
+              <label>关联合同</label>
+              <select class="form-control" id="invFormContract" style="height:32px;font-size:13px;" onchange="selectContractForInvoice(this.value?parseInt(this.value):null)">
+                <option value="">不关联（稍后在发票管理中关联）</option>
+              </select>
+              <small class="text-muted">选择已有合同进行关联，也可稍后在发票管理中关联。未关联的发票状态为"待关联"。</small>
+            </div>
+          </div>
+          <div style="text-align:right;margin-top:10px;">
+            <button class="btn btn-default btn-sm" onclick="goInvoiceStepBack()"><i class="fa-solid fa-arrow-left"></i> 上一步</button>
+            <button class="btn btn-primary btn-sm" onclick="submitInvoice()"><i class="fa-solid fa-check"></i> 确认提交</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 发票详情弹框 ============ -->
+  <div class="invoice-detail-overlay" id="invoiceDetailModal" style="display:none;">
+    <div class="invoice-detail-dialog">
+      <div class="idtl-header">
+        <h3><i class="fa-solid fa-file-invoice"></i> 发票详情</h3>
+        <button class="idtl-close" onclick="closeInvoiceDetailModal()" title="关闭">&times;</button>
+      </div>
+      <div class="idtl-body">
+        <div class="row">
+          <div class="col-md-8">
+            <!-- 发票图片预览 -->
+            <div class="idtl-preview" id="invoicePreviewArea">
+              <i class="fa-solid fa-file-image" style="font-size:64px;color:#CCC;"></i>
+              <p style="color:#999;margin-top:10px;">发票扫描件预览</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <!-- 发票信息 -->
+            <div class="idtl-info">
+              <h4 style="color:var(--fa-primary);border-bottom:1px solid #EEE;padding-bottom:8px;margin-bottom:12px;"><i class="fa-solid fa-info-circle"></i> 发票信息</h4>
+              <div class="idtl-info-row"><span class="idtl-label">发票号码</span><span class="idtl-value" id="idtlNo">—</span></div>
+              <div class="idtl-info-row"><span class="idtl-label">发票类型</span><span class="idtl-value" id="idtlType">—</span></div>
+              <div class="idtl-info-row"><span class="idtl-label">开票日期</span><span class="idtl-value" id="idtlDate">—</span></div>
+              <div class="idtl-info-row"><span class="idtl-label">发票金额</span><span class="idtl-value" id="idtlAmount" style="color:var(--fa-danger);font-weight:600;">—</span></div>
+              <div class="idtl-info-row"><span class="idtl-label">税率</span><span class="idtl-value" id="idtlTaxRate">—</span></div>
+              <div class="idtl-info-row"><span class="idtl-label">税额</span><span class="idtl-value" id="idtlTax">—</span></div>
+              <div class="idtl-info-row"><span class="idtl-label">价税合计</span><span class="idtl-value" id="idtlTotal" style="color:var(--fa-danger);font-weight:600;">—</span></div>
+              <div class="idtl-info-row"><span class="idtl-label">开票方</span><span class="idtl-value" id="idtlIssuer">—</span></div>
+              <div class="idtl-info-row"><span class="idtl-label">备注</span><span class="idtl-value" id="idtlRemark">—</span></div>
+
+              <h4 style="color:var(--fa-primary);border-bottom:1px solid #EEE;padding-bottom:8px;margin:16px 0 12px;"><i class="fa-solid fa-link"></i> 关联合同</h4>
+              <div id="idtlContractInfo">
+                <!-- JS动态渲染 -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="idtl-footer">
+        <button class="btn btn-default btn-sm" onclick="closeInvoiceDetailModal()"><i class="fa-solid fa-xmark"></i> 关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 关联合同弹框 ============ -->
+  <div class="invoice-link-overlay" id="invoiceLinkModal" style="display:none;">
+    <div class="invoice-link-dialog">
+      <div class="ilk-header">
+        <h3><i class="fa-solid fa-link"></i> 关联合同</h3>
+        <button class="ilk-close" onclick="closeInvoiceLinkModal()" title="关闭">&times;</button>
+      </div>
+      <div class="ilk-body">
+        <div class="input-group" style="width:100%;margin-bottom:12px;">
+          <input type="text" class="form-control" id="ilkContractSearch" placeholder="搜索合同编号或名称..." oninput="renderLinkContractList()">
+          <span class="input-group-addon"><i class="fa-solid fa-search"></i></span>
+        </div>
+        <div class="ilk-contract-list" id="ilkContractList">
+          <!-- JS动态渲染 -->
+        </div>
+      </div>
+      <div class="ilk-footer">
+        <button class="btn btn-default btn-sm" onclick="closeInvoiceLinkModal()"><i class="fa-solid fa-xmark"></i> 取消</button>
+        <button class="btn btn-primary btn-sm" onclick="confirmLinkContract()"><i class="fa-solid fa-check"></i> 确认关联</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 协同编辑列表页 ============ -->
+  <div id="pageCollabEdit" style="display:none;">
+    <!-- 页面头部 -->
+    <div style="background:#fff;border-bottom:1px solid #E8ECF0;border-radius:8px 8px 0 0;margin-bottom:0;">
+      <!-- 上排：返回 + 名称 + 操作按钮 -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button onclick="cancelCollabEdit()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid #E0E0E0;border-radius:6px;background:#fff;color:#555;font-size:13px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#F5F7FA';this.style.borderColor:#CCC;" onmouseout="this.style.background='#fff';this.style.borderColor='#E0E0E0';"><i class="fa-solid fa-arrow-left" style="font-size:12px;"></i> 返回</button>
+          <div style="display:flex;align-items:baseline;gap:10px;">
+            <span style="font-size:17px;font-weight:700;color:#1A1A1A;" id="collabEditTitle"><i class="fa-solid fa-file-contract" style="color:var(--fa-primary);margin-right:4px;"></i>合同编辑</span>
+            <span style="font-size:12px;color:#AAA;font-weight:400;">|</span>
+            <span style="font-size:12px;color:#999;">编号：<span id="collabEditNo" style="color:#666;font-weight:500;">—</span></span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button onclick="cancelCollabEdit()" style="display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border:1px solid #E0E0E0;border-radius:6px;background:#fff;color:#666;font-size:13px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#F5F7FA';" onmouseout="this.style.background='#fff';"><i class="fa-solid fa-xmark" style="font-size:12px;"></i> 取消</button>
+          <button onclick="saveCollabEditDoc(true)" style="display:inline-flex;align-items:center;gap:5px;padding:7px 18px;border:1px solid #FF9800;border-radius:6px;background:#FFF8E1;color:#E65100;font-size:13px;cursor:pointer;transition:all 0.15s;font-weight:500;" onmouseover="this.style.background='#FFE0B2';" onmouseout="this.style.background='#FFF8E1';"><i class="fa-solid fa-floppy-disk" style="font-size:12px;"></i> 保存草稿</button>
+          <button onclick="saveCollabEditDoc()" style="display:inline-flex;align-items:center;gap:5px;padding:7px 18px;border:none;border-radius:6px;background:#2E7D32;color:#fff;font-size:13px;cursor:pointer;transition:all 0.15s;font-weight:500;" onmouseover="this.style.background='#388E3C';" onmouseout="this.style.background='#2E7D32';"><i class="fa-solid fa-floppy-disk" style="font-size:12px;"></i> 保存</button>
+          <button onclick="saveAndSubmitAudit()" style="display:inline-flex;align-items:center;gap:5px;padding:7px 18px;border:none;border-radius:6px;background:var(--fa-primary);color:#fff;font-size:13px;cursor:pointer;transition:all 0.15s;font-weight:500;" onmouseover="this.style.background='#0D6EFD';" onmouseout="this.style.background='var(--fa-primary)';"><i class="fa-solid fa-paper-plane" style="font-size:12px;"></i> 保存并提交审核</button>
+        </div>
+      </div>
+      <!-- 下排：在线成员 -->
+      <div style="display:flex;align-items:center;padding:0 20px 10px;gap:8px;">
+        <div class="online-users" id="collabOnlineUsersBar" style="display:flex;align-items:center;gap:6px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- 协同编辑器 -->
+    <div style="background:#fff;border:1px solid #E8ECF0;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;">
+      <!-- 水平工具栏 -->
+      <div class="collab-toolbar" style="border-bottom:1px solid #E8ECF0;">
+        <button class="tb-btn" title="加粗" onclick="collabFormatCmd('bold')"><i class="fa-solid fa-bold"></i></button>
+        <button class="tb-btn" title="斜体" onclick="collabFormatCmd('italic')"><i class="fa-solid fa-italic"></i></button>
+        <button class="tb-btn" title="下划线" onclick="collabFormatCmd('underline')"><i class="fa-solid fa-underline"></i></button>
+        <div class="tb-divider"></div>
+        <button class="tb-btn" title="插入批注" onclick="openAnnotationPopup()"><i class="fa-solid fa-comment-dots"></i></button>
+        <button class="tb-btn" title="修订痕迹" onclick="toggleRevisionMode()" id="btnRevisionMode"><i class="fa-solid fa-code-compare"></i></button>
+        <span id="revisionModeIndicator" style="display:none;font-size:11px;color:var(--fa-danger);font-weight:600;margin-left:4px;"><i class="fa-solid fa-code-compare"></i> 修订模式</span>
+        <div class="tb-divider"></div>
+        <button class="tb-btn" title="接受修订" onclick="acceptRevision()"><i class="fa-solid fa-check"></i></button>
+        <button class="tb-btn" title="拒绝修订" onclick="rejectRevision()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="tb-divider"></div>
+        <button class="tb-btn" title="版本历史" onclick="showVersionHistory()"><i class="fa-solid fa-clock-rotate-left"></i></button>
+        <button class="tb-btn" title="导出" onclick="exportCollabDoc()"><i class="fa-solid fa-download"></i></button>
+      </div>
+
+      <!-- 编辑区 + 右侧面板 -->
+      <div style="display:flex;">
+        <!-- 主编辑区 -->
+        <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+          <div class="collab-editor-body" id="collabEditorBody" contenteditable="true" style="border:none;border-radius:0;min-height:calc(100vh - 220px);">
+          </div>
+          <div class="collab-status-bar">
+            <div class="save-status saved" id="collabSaveStatus">
+              <i class="fa-solid fa-circle-check"></i> 已保存
+            </div>
+            <div>
+              <span id="collabWordCount">字数：0</span>
+              <span style="margin:0 8px;">|</span>
+              <span id="collabLastEdit">最后编辑：—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧面板 -->
+        <div class="collab-side-panel">
+          <div class="panel-tabs">
+            <button class="panel-tab active" onclick="switchCollabPanel('annotations')">批注 <span class="badge" style="background:var(--fa-warning);font-size:10px;padding:1px 5px;" id="annoCount">0</span></button>
+            <button class="panel-tab" onclick="switchCollabPanel('revisions')">修订 <span class="badge" style="background:var(--fa-primary);font-size:10px;padding:1px 5px;" id="revCount">0</span></button>
+            <button class="panel-tab" onclick="switchCollabPanel('reviews')">评审 <span class="badge" style="background:var(--fa-success);font-size:10px;padding:1px 5px;" id="reviewCount">0</span></button>
+          </div>
+          <div class="panel-content" id="collabPanelContent">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /pageCollabEdit -->
+
+  <!-- ============ 合同审批页 ============ -->
+  <div id="pageContractApproval" style="display:none;">
+    <div class="page-header">
+      <h1>合同审批 <small>共 <span id="contractApprovalTotal">0</span> 条审核中</small></h1>
+      <div>
+        <button class="btn btn-default" onclick="refreshContractApproval()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+      </div>
+    </div>
+    <div class="search-toolbar">
+      <div class="row">
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group"><label>合同编号</label><input type="text" class="form-control" id="approvalSearchNo" placeholder="输入合同编号"></div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group"><label>合同名称</label><input type="text" class="form-control" id="approvalSearchName" placeholder="输入合同名称"></div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>审核节点</label>
+            <select class="form-control" id="approvalSearchNode"><option value="">全部</option><option>部门审批</option><option>法务审批</option><option>财务审批</option><option>总经理审批</option></select>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>紧急程度</label>
+            <select class="form-control" id="approvalSearchUrgency"><option value="">全部</option><option>普通</option><option>紧急</option><option>超时</option></select>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group" style="display:flex;align-items:flex-end;height:100%;">
+            <div class="btn-search-group">
+              <button class="btn btn-primary btn-sm" onclick="applyContractApprovalFilter()"><i class="fa-solid fa-magnifying-glass"></i> 搜索</button>
+              <button class="btn btn-default btn-sm" onclick="resetContractApprovalFilter()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fa-table-wrap">
+      <div class="table-toolbar">
+        <div class="btn-group">
+          <button class="btn btn-success btn-sm" onclick="batchApprovalPass()"><i class="fa-solid fa-check-double"></i> 批量通过</button>
+          <button class="btn btn-danger btn-sm" onclick="batchApprovalReject()"><i class="fa-solid fa-xmark"></i> 批量驳回</button>
+        </div>
+        <div class="right-tools">
+          <span class="text-muted" style="font-size:12px;">审核中合同: <b style="color:var(--fa-warning);" id="approvalPendingCount">0</b> 条</span>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th style="width:36px;"><input type="checkbox" id="approvalCheckAll" onchange="toggleApprovalCheckAll()"></th>
+              <th>合同编号</th>
+              <th>合同名称</th>
+              <th>合同类型</th>
+              <th>发起人</th>
+              <th>当前审核节点</th>
+              <th>提交时间</th>
+              <th>紧急程度</th>
+              <th style="width:180px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="contractApprovalTableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination-wrap">
+        <div class="page-info">显示第 1 到 <span id="approvalPageEnd">0</span> 条，共 <span id="approvalPageTotal">0</span> 条记录</div>
+        <ul class="pagination pagination-sm"><li class="active"><a href="#">1</a></li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 待我审核页 ============ -->
+  <div id="pageMyAudit" style="display:none;">
+    <div class="page-header">
+      <h1>待我审核 <small>共 <span id="myAuditTotal">4</span> 条待处理</small></h1>
+      <div>
+        <button class="btn btn-default" onclick="refreshMyAudit()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+      </div>
+    </div>
+    <div class="search-toolbar">
+      <div class="row">
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group"><label>合同编号</label><input type="text" class="form-control" id="myAuditSearchNo" placeholder="输入合同编号"></div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group"><label>合同名称</label><input type="text" class="form-control" id="myAuditSearchName" placeholder="输入合同名称"></div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>审核节点</label>
+            <select class="form-control" id="myAuditSearchNode"><option value="">全部</option><option>部门审批</option><option>法务审批</option><option>财务审批</option><option>总经理审批</option></select>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>紧急程度</label>
+            <select class="form-control" id="myAuditSearchUrgency"><option value="">全部</option><option>普通</option><option>紧急</option><option>超时</option></select>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>&nbsp;</label>
+            <div class="btn-search-group">
+              <button class="btn btn-primary btn-sm" onclick="applyMyAuditFilter()"><i class="fa-solid fa-magnifying-glass"></i> 搜索</button>
+              <button class="btn btn-default btn-sm" onclick="resetMyAuditFilter()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fa-table-wrap">
+      <div class="table-toolbar">
+
+        <div class="right-tools">
+          <span class="text-muted" style="font-size:12px;">逾期未审: <b style="color:var(--fa-danger);" id="overdueCount">1</b> 条</span>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th style="width:36px;"><input type="checkbox" id="myAuditCheckAll" onchange="toggleMyAuditCheckAll()"></th>
+              <th>合同编号</th>
+              <th>合同名称</th>
+              <th>合同类型</th>
+              <th>发起人</th>
+              <th>当前审核节点</th>
+              <th>提交时间</th>
+              <th>紧急程度</th>
+              <th style="width:180px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="myAuditTableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination-wrap">
+        <div class="page-info">显示第 1 到 4 条，共 <span id="myAuditPageTotal">4</span> 条记录</div>
+        <ul class="pagination pagination-sm"><li class="active"><a href="#">1</a></li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 合同主体管理页 ============ -->
+  <div id="pageContractEntity" style="display:none;">
+    <div class="page-header">
+      <h1>合同主体管理 <small>维护企业自身合同主体信息（多法人主体），合同录入时可选择主体</small></h1>
+      <div>
+        <button class="btn btn-primary" onclick="openCreateEntity()"><i class="fa-solid fa-plus"></i> 新建主体</button>
+        <button class="btn btn-default" onclick="renderEntityTable()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+      </div>
+    </div>
+
+    <!-- 搜索工具栏 -->
+    <div class="search-toolbar">
+      <div class="row">
+        <div class="col-md-4 col-sm-6">
+          <div class="form-group"><label>主体名称</label><input type="text" class="form-control" id="entitySearchName" placeholder="输入主体名称"></div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group"><label>主体类型</label>
+            <select class="form-control" id="entitySearchType"><option value="">全部</option><option>总公司</option><option>分公司</option><option>子公司</option><option>事业部</option></select>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group"><label>状态</label>
+            <select class="form-control" id="entitySearchStatus"><option value="">全部</option><option value="1">启用</option><option value="0">停用</option></select>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>&nbsp;</label>
+            <div class="btn-search-group">
+              <button class="btn btn-primary btn-sm" onclick="applyEntityFilter()"><i class="fa-solid fa-magnifying-glass"></i> 搜索</button>
+              <button class="btn btn-default btn-sm" onclick="resetEntityFilter()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 数据表格 -->
+    <div class="fa-table-wrap">
+      <div class="table-toolbar">
+        <div class="btn-group">
+          <button class="btn btn-default btn-sm" onclick="exportEntityData()"><i class="fa-solid fa-download"></i> 导出</button>
+        </div>
+        <div class="right-tools">
+          <span class="text-muted" style="font-size:12px;">共 <b id="entityListCount">0</b> 条记录</span>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover" style="margin-bottom:0;">
+          <thead>
+            <tr>
+              <th style="width:50px;">序号</th>
+              <th>主体名称</th>
+              <th>主体类型</th>
+              <th>统一社会信用代码</th>
+              <th>法定代表人</th>
+              <th>注册地址</th>
+              <th>联系电话</th>
+              <th>关联合同数</th>
+              <th>状态</th>
+              <th style="width:160px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="entityTableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination-wrap">
+        <div class="page-info">显示第 1 到 <span id="entityPageEnd">0</span> 条，共 <span id="entityPageTotal">0</span> 条记录</div>
+        <ul class="pagination pagination-sm"><li class="active"><a href="#">1</a></li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 合同主体 新建/编辑模态框 ============ -->
+  <div class="modal fade" id="modalEntity" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id="entityModalTitle"><i class="fa-solid fa-building"></i> 新建合同主体</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="entityEditId" value="">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>主体名称 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="entityName" placeholder="如：XX科技有限公司">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>主体类型 <span class="text-danger">*</span></label>
+                <select class="form-control" id="entityType">
+                  <option value="">请选择</option>
+                  <option>总公司</option>
+                  <option>分公司</option>
+                  <option>子公司</option>
+                  <option>事业部</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>统一社会信用代码 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="entityCreditCode" placeholder="18位统一社会信用代码" maxlength="18">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>法定代表人 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="entityLegalPerson" placeholder="法定代表人姓名">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>注册地址</label>
+                <input type="text" class="form-control" id="entityAddress" placeholder="营业执照注册地址">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>联系电话</label>
+                <input type="text" class="form-control" id="entityPhone" placeholder="主体联系电话">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>电子邮箱</label>
+                <input type="text" class="form-control" id="entityEmail" placeholder="主体联系邮箱">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>开户银行 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="entityBank" placeholder="开户银行名称">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>银行账号 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="entityBankAccount" placeholder="银行账号">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>经营范围</label>
+                <textarea class="form-control" id="entityBusinessScope" rows="3" placeholder="营业执照经营范围"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>状态</label>
+                <select class="form-control" id="entityStatus">
+                  <option value="1">启用</option>
+                  <option value="0">停用</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>备注</label>
+                <input type="text" class="form-control" id="entityRemark" placeholder="备注信息">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss="modal">取消</button>
+          <button class="btn btn-primary" onclick="saveEntity()"><i class="fa-solid fa-check"></i> 保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 合同主体 详情模态框 ============ -->
+  <div class="modal fade" id="modalEntityDetail" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><i class="fa-solid fa-building"></i> 合同主体详情</h4>
+        </div>
+        <div class="modal-body" id="entityDetailBody">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 审核流程配置页 ============ -->
+  <div id="pageAuditConfig" style="display:none;">
+    <div class="page-header">
+      <h1>审核流程配置 <small>管理合同审批流程模板</small></h1>
+      <div>
+        <button class="btn btn-primary" onclick="openCreateFlow()"><i class="fa-solid fa-plus"></i> 新建流程</button>
+        <button class="btn btn-default" onclick="refreshFlowList()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+      </div>
+    </div>
+    <div class="fa-box primary">
+      <div class="box-header with-border">
+        <h3><i class="fa-solid fa-list-ol"></i> 流程模板列表</h3>
+        <div class="box-tools">
+          <span class="text-muted" style="font-size:12px;">共 <b id="flowCount">3</b> 个模板</span>
+        </div>
+      </div>
+      <div class="box-body" style="padding:0;">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover" style="margin-bottom:0;">
+            <thead>
+              <tr>
+                <th style="width:50px;">序号</th>
+                <th>流程名称</th>
+                <th>适用合同类型</th>
+                <th>金额条件触发</th>
+                <th>审核节点</th>
+                <th>抄送人</th>
+                <th>状态</th>
+                <th style="width:160px;">操作</th>
+              </tr>
+            </thead>
+            <tbody id="flowTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 合同编号规则页 ============ -->
+  <div id="pageNoRule" style="display:none;">
+    <div class="page-header">
+      <h1>合同编号规则 <small>自定义合同编号自动生成规则</small></h1>
+      <div>
+        <button class="btn btn-primary" onclick="openCreateNoRule()"><i class="fa-solid fa-plus"></i> 新建规则</button>
+        <button class="btn btn-default" onclick="renderNoRuleTable()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+      </div>
+    </div>
+
+    <!-- 规则列表 -->
+    <div class="fa-box">
+      <div class="box-body" style="padding:0;">
+        <table class="table table-bordered" style="margin-bottom:0;">
+          <thead>
+            <tr>
+              <th style="width:50px;">序号</th>
+              <th>规则名称</th>
+              <th>适用合同类型</th>
+              <th>编号格式预览</th>
+              <th>当前流水号</th>
+              <th>状态</th>
+              <th style="width:140px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="noRuleTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 新建/编辑规则模态框 -->
+    <div class="modal fade" id="modalNoRule" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="noRuleModalTitle"><i class="fa-solid fa-barcode"></i> 新建编号规则</h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="noRuleEditId" value="">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>规则名称 <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="noRuleName" placeholder="如：采购合同编号规则">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>适用合同类型 <span class="text-danger">*</span></label>
+                  <select class="form-control" id="noRuleContractType">
+                    <option value="">请选择</option>
+                    <option value="采购合同">采购合同</option>
+                    <option value="服务合同">服务合同</option>
+                    <option value="租赁合同">租赁合同</option>
+                    <option value="合作协议">合作协议</option>
+                    <option value="all">全部类型</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- 编号组成配置 -->
+            <h5 style="color:var(--fa-primary);border-bottom:1px solid #eee;padding-bottom:6px;margin-top:10px;"><i class="fa-solid fa-puzzle-piece"></i> 编号组成配置</h5>
+            <p style="font-size:12px;color:#888;margin-bottom:12px;">点击变量标签添加到编号格式中，支持自定义前缀/后缀，拖拽调整顺序</p>
+
+            <!-- 可用变量 -->
+            <div style="margin-bottom:12px;">
+              <label style="font-size:12px;color:#666;margin-bottom:6px;display:block;">可用变量（点击添加）</label>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="label label-primary" style="cursor:pointer;font-size:12px;padding:4px 10px;" onclick="addNoRuleVariable('prefix')"><i class="fa-solid fa-tag"></i> 前缀</span>
+                <span class="label" style="cursor:pointer;font-size:12px;padding:4px 10px;background:#9C27B0;color:#fff;" onclick="addNoRuleVariable('createDate')"><i class="fa-solid fa-calendar-plus"></i> 创建日期</span>
+                <span class="label" style="cursor:pointer;font-size:12px;padding:4px 10px;background:#FF5722;color:#fff;" onclick="addNoRuleVariable('contractDate')"><i class="fa-solid fa-calendar-check"></i> 合同日期</span>
+                <span class="label label-success" style="cursor:pointer;font-size:12px;padding:4px 10px;" onclick="addNoRuleVariable('dept')"><i class="fa-solid fa-sitemap"></i> 部门编码</span>
+                <span class="label label-warning" style="cursor:pointer;font-size:12px;padding:4px 10px;" onclick="addNoRuleVariable('type')"><i class="fa-solid fa-tags"></i> 合同类型</span>
+                <span class="label label-danger" style="cursor:pointer;font-size:12px;padding:4px 10px;" onclick="addNoRuleVariable('seq')"><i class="fa-solid fa-hashtag"></i> 流水号 <i class="fa-solid fa-lock" style="font-size:9px;opacity:0.7;" title="固定必选项，不可删除"></i></span>
+                <span class="label label-default" style="cursor:pointer;font-size:12px;padding:4px 10px;" onclick="addNoRuleVariable('suffix')"><i class="fa-solid fa-tag"></i> 后缀</span>
+              </div>
+              <small class="text-muted" style="display:block;margin-top:6px;"><i class="fa-solid fa-circle-info"></i> 创建日期：取合同创建当天的日期；合同日期：取合同签订日期（signDate），未签订则取创建日期；<span style="color:#C62828;font-weight:500;">流水号为固定必选项，不可删除</span></small>
+            </div>
+
+            <!-- 编号格式预览区 -->
+            <div style="margin-bottom:12px;">
+              <label style="font-size:12px;color:#666;margin-bottom:6px;display:block;">编号格式（点击 × 移除变量）</label>
+              <div id="noRuleFormatArea" style="min-height:50px;border:2px dashed #E0E0E0;border-radius:6px;padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:#FAFAFA;">
+                <span style="color:#999;font-size:13px;">点击上方变量添加到此处...</span>
+              </div>
+            </div>
+
+            <!-- 实时预览 -->
+            <div style="margin-bottom:12px;padding:12px;background:#E8F4FD;border-radius:6px;border:1px solid #B3D9F2;">
+              <label style="font-size:12px;color:#1565C0;margin-bottom:4px;display:block;"><i class="fa-solid fa-eye"></i> 实时预览</label>
+              <div id="noRulePreview" style="font-size:18px;font-weight:600;color:var(--fa-primary);letter-spacing:1px;font-family:monospace;">—</div>
+            </div>
+
+            <!-- 各变量详细配置 -->
+            <div id="noRuleVarConfigs" style="margin-top:12px;">
+              <!-- 动态渲染 -->
+            </div>
+
+            <!-- 流水号配置 -->
+            <div class="row" style="margin-top:12px;">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>流水号位数</label>
+                  <select class="form-control" id="noRuleSeqLen" onchange="updateNoRulePreview()">
+                    <option value="3">3位（001-999）</option>
+                    <option value="4" selected>4位（0001-9999）</option>
+                    <option value="5">5位（00001-99999）</option>
+                    <option value="6">6位（000001-999999）</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>起始流水号</label>
+                  <input type="number" class="form-control" id="noRuleSeqStart" value="1" min="1" onchange="updateNoRulePreview()">
+                </div>
+              </div>
+            </div>
+
+            <!-- 分隔符 -->
+            <div class="row" style="margin-top:6px;">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>变量间分隔符</label>
+                  <select class="form-control" id="noRuleSeparator" onchange="updateNoRulePreview()">
+                    <option value="">无分隔符</option>
+                    <option value="-" selected>短横线（-）</option>
+                    <option value="/">斜杠（/）</option>
+                    <option value=".">点号（.）</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="form-group">
+                  <label>备注</label>
+                  <input type="text" class="form-control" id="noRuleRemark" placeholder="规则说明...">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal">取消</button>
+            <button class="btn btn-primary" onclick="saveNoRule()"><i class="fa-solid fa-check"></i> 保存规则</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ 操作日志页 ============ -->
+  <div id="pageOperationLog" style="display:none;">
+    <div class="page-header">
+      <h1>操作日志 <small>完整记录所有用户操作轨迹，日志不可篡改</small> <span style="font-size:14px;color:var(--fa-primary);margin-left:8px;" id="opLogTotalCount">0</span> <small>条记录</small></h1>
+      <div>
+        <button class="btn btn-default" onclick="renderOperationLogTable()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+        <button class="btn btn-success" onclick="exportOperationLog()"><i class="fa-solid fa-download"></i> 导出日志</button>
+      </div>
+    </div>
+
+    <!-- 搜索筛选 -->
+    <div class="search-toolbar">
+      <div class="row">
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>操作人</label><input type="text" class="form-control" id="opLogSearchUser" placeholder="输入操作人"></div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>操作类型</label>
+            <select class="form-control" id="opLogSearchType">
+              <option value="">全部</option>
+              <option value="create">新增</option>
+              <option value="delete">删除</option>
+              <option value="edit">修改</option>
+              <option value="view">查看</option>
+              <option value="download">下载</option>
+              <option value="print">打印</option>
+              <option value="approve">审批</option>
+              <option value="withdraw">撤回</option>
+              <option value="rollback">回滚</option>
+              <option value="submit">提交</option>
+              <option value="export">导出</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>合同编号</label><input type="text" class="form-control" id="opLogSearchContractNo" placeholder="输入合同编号"></div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>开始日期</label><input type="date" class="form-control" id="opLogSearchDateStart"></div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>结束日期</label><input type="date" class="form-control" id="opLogSearchDateEnd"></div>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <div class="form-group"><label>&nbsp;</label>
+            <div class="btn-search-group">
+              <button class="btn btn-primary btn-sm" onclick="applyOpLogFilter()"><i class="fa-solid fa-magnifying-glass"></i> 搜索</button>
+              <button class="btn btn-default btn-sm" onclick="resetOpLogFilter()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 日志表格 -->
+    <div class="fa-box">
+      <div class="box-body" style="padding:0;">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover" style="font-size:13px;">
+            <thead>
+              <tr>
+                <th style="width:50px;">#</th>
+                <th style="width:90px;">操作人</th>
+                <th style="width:80px;">操作类型</th>
+                <th style="width:120px;">合同编号</th>
+                <th>合同名称</th>
+                <th>操作描述</th>
+                <th style="width:100px;">IP地址</th>
+                <th style="width:160px;">操作时间</th>
+              </tr>
+            </thead>
+            <tbody id="opLogTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="box-footer" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:12px;color:#999;">显示第 <span id="opLogPageStart">1</span> 到 <span id="opLogPageEnd">0</span> 条，共 <span id="opLogPageTotal">0</span> 条记录</div>
+        <div style="display:flex;gap:4px;">
+          <button class="btn btn-xs btn-default" onclick="opLogPrevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+          <span style="font-size:12px;line-height:28px;padding:0 8px;" id="opLogPageInfo">1/1</span>
+          <button class="btn btn-xs btn-default" onclick="opLogNextPage()"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Excel模板导入页 ============ -->
+  <div id="pageExcelImport" style="display:none;">
+    <div class="page-header">
+      <h1>
+        <button class="btn btn-default btn-sm" onclick="switchPage('contract')" style="margin-right:10px;"><i class="fa-solid fa-arrow-left"></i></button>
+        Excel模板导入 <small>批量导入历史合同信息</small>
+      </h1>
+      <div>
+        <button class="btn btn-success" onclick="downloadExcelTemplate()"><i class="fa-solid fa-download"></i> 下载导入模板</button>
+        <button class="btn btn-default btn-sm" onclick="switchPage('contract')"><i class="fa-solid fa-arrow-left"></i> 返回合同列表</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- 上传与预览 -->
+      <div class="col-md-12">
+        <!-- 步骤1：上传文件 -->
+        <div class="fa-box primary">
+          <div class="box-header with-border">
+            <h3><i class="fa-solid fa-cloud-arrow-up"></i> 上传Excel文件</h3>
+            <div class="box-tools">
+              <button class="btn btn-xs btn-success" onclick="downloadExcelTemplate()"><i class="fa-solid fa-download"></i> 下载模板</button>
+            </div>
+          </div>
+          <div class="box-body">
+            <div class="alert alert-info" style="margin-bottom:12px;">
+              <i class="fa-solid fa-lightbulb"></i> <strong>使用说明：</strong>请先下载标准模板，按模板格式填写合同信息后上传。系统将自动校验字段格式，校验通过后可批量导入。
+            </div>
+            <div class="upload-zone" id="excelUploadZone" onclick="document.getElementById('excelFileInput').click();"
+                 ondragover="event.preventDefault();this.classList.add('dragover');"
+                 ondragleave="this.classList.remove('dragover');"
+                 ondrop="event.preventDefault();this.classList.remove('dragover');handleExcelDrop(event);">
+              <div class="upload-icon"><i class="fa-solid fa-file-excel"></i></div>
+              <div class="upload-title">将Excel文件拖拽到此处，或 <span class="upload-btn-text">点击上传</span></div>
+              <div class="upload-hint">支持 .xlsx、.xls 格式，单次最多导入500条记录</div>
+            </div>
+            <input type="file" id="excelFileInput" accept=".xlsx,.xls" style="display:none;" onchange="handleExcelUpload(this)">
+
+            <!-- 已上传文件列表 -->
+            <div class="file-list-panel" id="excelFileList" style="display:none;">
+              <div class="file-item" id="excelFileItem">
+                <div class="file-icon"><i class="fa-solid fa-file-excel" style="color:#217346;"></i></div>
+                <div class="file-info">
+                  <div class="file-name" id="excelFileName">—</div>
+                  <div class="file-size" id="excelFileSize">—</div>
+                </div>
+                <div class="file-status"><span class="status-badge status-approved">已上传</span></div>
+                <span class="file-remove" onclick="removeExcelFile()"><i class="fa-solid fa-xmark"></i></span>
+              </div>
+            </div>
+
+            <!-- 导入进度 -->
+            <div id="excelImportProgress" style="display:none;margin-top:15px;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:#666;margin-bottom:4px;">
+                <span>正在解析文件...</span>
+                <span id="excelProgressText">0%</span>
+              </div>
+              <div class="import-progress-bar">
+                <div class="bar" id="excelProgressBar" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 步骤2：模板字段说明 -->
+        <div class="fa-box success">
+          <div class="box-header with-border">
+            <h3><i class="fa-solid fa-circle-info"></i> 模板字段说明</h3>
+          </div>
+          <div class="box-body">
+            <table class="template-preview-table" style="width:100%;font-size:12px;">
+              <thead>
+                <tr>
+                  <th style="width:130px;">字段名称</th><th style="width:70px;">是否必填</th><th style="width:200px;">格式说明</th><th>示例</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:#F0F7FF;"><td colspan="4" style="font-weight:600;color:var(--fa-primary);"><i class="fa-solid fa-star" style="font-size:10px;margin-right:4px;"></i>核心信息</td></tr>
+                <tr><td><strong>合同名称</strong></td><td><span class="text-danger">必填</span></td><td>文本，不超过100字</td><td>医疗器械采购合同</td></tr>
+                <tr><td><strong>合同类别</strong></td><td><span class="text-danger">必填</span></td><td>采购合同/服务合同/合作协议/租赁合同/其他</td><td>采购合同</td></tr>
+                <tr><td><strong>合同主体</strong></td><td><span class="text-danger">必填</span></td><td>文本，签约主体公司名称</td><td>XX科技有限公司</td></tr>
+                <tr><td><strong>相对方</strong></td><td><span class="text-danger">必填</span></td><td>文本，对方签约主体</td><td>北京康医疗器械有限公司</td></tr>
+                <tr><td><strong>合同金额</strong></td><td><span class="text-danger">必填</span></td><td>数字，单位：元</td><td>580000</td></tr>
+                <tr><td><strong>收支方向</strong></td><td>选填</td><td>支出/收入</td><td>支出</td></tr>
+                <tr><td><strong>币种</strong></td><td>选填</td><td>CNY/USD/EUR等，默认CNY</td><td>CNY</td></tr>
+                <tr style="background:#F0F7FF;"><td colspan="4" style="font-weight:600;color:var(--fa-primary);"><i class="fa-solid fa-calendar" style="font-size:10px;margin-right:4px;"></i>日期与期限</td></tr>
+                <tr><td><strong>期限类型</strong></td><td>选填</td><td>固定期限/无固定期限/以完成一定任务为期限</td><td>固定期限</td></tr>
+                <tr><td><strong>签订日期</strong></td><td>选填</td><td>日期格式：YYYY-MM-DD</td><td>2026-05-15</td></tr>
+                <tr><td><strong>生效日期</strong></td><td>选填</td><td>日期格式：YYYY-MM-DD</td><td>2026-05-15</td></tr>
+                <tr><td><strong>起始日期</strong></td><td>选填</td><td>日期格式：YYYY-MM-DD</td><td>2026-05-15</td></tr>
+                <tr><td><strong>结束日期</strong></td><td>选填</td><td>日期格式：YYYY-MM-DD</td><td>2027-05-14</td></tr>
+                <tr style="background:#F0F7FF;"><td colspan="4" style="font-weight:600;color:var(--fa-primary);"><i class="fa-solid fa-building" style="font-size:10px;margin-right:4px;"></i>经办与履约</td></tr>
+                <tr><td><strong>负责人</strong></td><td>选填</td><td>文本</td><td>张经理</td></tr>
+                <tr><td><strong>签署部门</strong></td><td>选填</td><td>文本</td><td>采购部</td></tr>
+                <tr><td><strong>计价方式</strong></td><td>选填</td><td>固定总价/按量计费/按次计费/按月计费/里程碑付款等</td><td>固定总价</td></tr>
+                <tr><td><strong>履约地点</strong></td><td>选填</td><td>文本</td><td>北京市朝阳区</td></tr>
+                <tr style="background:#F0F7FF;"><td colspan="4" style="font-weight:600;color:var(--fa-primary);"><i class="fa-solid fa-user-tie" style="font-size:10px;margin-right:4px;"></i>相对方联系信息</td></tr>
+                <tr><td><strong>相对方联系人</strong></td><td>选填</td><td>文本</td><td>李明</td></tr>
+                <tr><td><strong>相对方联系方式</strong></td><td>选填</td><td>文本，电话号码</td><td>010-88886666</td></tr>
+                <tr><td><strong>相对方联系地址</strong></td><td>选填</td><td>文本</td><td>北京市海淀区中关村南大街5号</td></tr>
+                <tr style="background:#F0F7FF;"><td colspan="4" style="font-weight:600;color:var(--fa-primary);"><i class="fa-solid fa-box-archive" style="font-size:10px;margin-right:4px;"></i>其他信息</td></tr>
+                <tr><td><strong>合同概要</strong></td><td>选填</td><td>文本，不超过500字</td><td>采购医疗器械一批</td></tr>
+                <tr><td><strong>合同总份数</strong></td><td>选填</td><td>整数</td><td>4</td></tr>
+                <tr><td><strong>送达日期</strong></td><td>选填</td><td>日期格式：YYYY-MM-DD</td><td>2026-05-20</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 步骤3：数据预览与校验（弹框展示） -->
+        <div class="excel-preview-overlay" id="excelPreviewModal">
+          <div class="excel-preview-dialog">
+            <div class="epd-header">
+              <h3><i class="fa-solid fa-table-list"></i> 数据预览与校验</h3>
+              <button class="epd-close" onclick="closeExcelPreviewModal()" title="关闭">&times;</button>
+            </div>
+            <div class="epd-stats">
+              <div class="stat-group">
+                <span class="stat-item text-success"><i class="fa-solid fa-check-circle"></i> 有效: <b id="excelValidCount">0</b></span>
+                <span class="stat-item text-danger"><i class="fa-solid fa-exclamation-circle"></i> 异常: <b id="excelErrorCount">0</b></span>
+                <span style="color:#999;font-size:11px;">| 共 <b id="excelTotalCount">0</b> 条</span>
+              </div>
+              <button class="btn btn-danger btn-sm batch-disabled" id="batchDeleteBtn" onclick="showBatchDeleteConfirm()" title="删除选中的记录">
+                <i class="fa-solid fa-trash-can"></i> 批量删除 (<span id="batchDeleteCount">0</span>)
+              </button>
+            </div>
+            <div class="epd-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th style="width:36px;"><input type="checkbox" id="excelCheckAll" onchange="toggleExcelCheckAll()" checked></th>
+                      <th style="width:40px;">行号</th>
+                      <th>合同名称</th>
+                      <th>合同类别</th>
+                      <th>合同主体</th>
+                      <th>相对方</th>
+                      <th>合同金额</th>
+                      <th>收支方向</th>
+                      <th>期限类型</th>
+                      <th>签订日期</th>
+                      <th>生效日期</th>
+                      <th>负责人</th>
+                      <th>签署部门</th>
+                      <th>计价方式</th>
+                      <th>校验状态</th>
+                      <th style="width:36px;">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="excelPreviewBody"></tbody>
+                </table>
+              </div>
+              <div id="excelPreviewEmpty" style="display:none;text-align:center;padding:60px 20px;color:#999;">
+                <i class="fa-solid fa-inbox" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                暂无预览数据
+              </div>
+            </div>
+            <div class="epd-footer">
+              <span class="selected-info">已选择 <b id="excelSelectedCount">0</b> 条记录</span>
+              <div class="btn-group">
+                <button class="btn btn-default btn-sm" onclick="closeExcelPreviewModal()"><i class="fa-solid fa-xmark"></i> 取消</button>
+                <button class="btn btn-primary btn-sm" onclick="confirmExcelImport()"><i class="fa-solid fa-check"></i> 确认导入选中记录</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 批量删除确认弹框 -->
+      <div class="batch-delete-confirm-overlay" id="batchDeleteConfirmModal" style="display:none;">
+        <div class="batch-delete-confirm-dialog">
+          <div class="bdc-header">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#E74C3C;font-size:22px;"></i>
+            <h4>确认批量删除</h4>
+          </div>
+          <div class="bdc-body">
+            <p>您确定要删除选中的 <b id="batchDeleteConfirmCount" style="color:#E74C3C;">0</b> 条记录吗？</p>
+            <p style="color:#999;font-size:12px;margin-top:6px;">此操作不可撤销，删除后数据将无法恢复。</p>
+          </div>
+          <div class="bdc-footer">
+            <button class="btn btn-default btn-sm" onclick="closeBatchDeleteConfirm()"><i class="fa-solid fa-xmark"></i> 取消</button>
+            <button class="btn btn-danger btn-sm" onclick="executeBatchDelete()"><i class="fa-solid fa-trash-can"></i> 确认删除</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ 合同文件批量上传导入页 ============ -->
+  <div id="pageFileImport" style="display:none;">
+    <div class="page-header">
+      <h1>
+        <button class="btn btn-default btn-sm" onclick="switchPage('contract')" style="margin-right:10px;"><i class="fa-solid fa-arrow-left"></i></button>
+        合同文件批量导入 <small>上传合同文件自动提取要素信息</small>
+      </h1>
+      <div>
+        <button class="btn btn-default btn-sm" onclick="switchPage('contract')"><i class="fa-solid fa-arrow-left"></i> 返回合同列表</button>
+      </div>
+    </div>
+
+    <!-- 步骤条 -->
+    <div class="fa-box" style="border-top-color:var(--fa-primary);">
+      <div class="box-body" style="padding:15px 30px;">
+        <div class="workflow-steps" id="importSteps">
+          <div class="step active" id="importStep1">
+            <div class="step-circle">1</div>
+            <div class="step-label">上传文件</div>
+          </div>
+          <div class="step-connector" id="importConn1"></div>
+          <div class="step" id="importStep2">
+            <div class="step-circle">2</div>
+            <div class="step-label">智能提取</div>
+          </div>
+          <div class="step-connector" id="importConn2"></div>
+          <div class="step" id="importStep3">
+            <div class="step-circle">3</div>
+            <div class="step-label">确认入库</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步骤1：上传文件 -->
+    <div id="importStep1Content">
+      <div class="fa-box primary">
+        <div class="box-header with-border">
+          <h3><i class="fa-solid fa-cloud-arrow-up"></i> 上传合同文件</h3>
+          <div class="box-tools">
+            <span style="font-size:12px;color:#666;">已上传 <b id="fileUploadCount">0</b> 个文件</span>
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="upload-zone" id="fileUploadZone" onclick="document.getElementById('contractFileInput').click();"
+               ondragover="event.preventDefault();this.classList.add('dragover');"
+               ondragleave="this.classList.remove('dragover');"
+               ondrop="event.preventDefault();this.classList.remove('dragover');handleContractFileDrop(event);">
+            <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="upload-title">将合同文件拖拽到此处，或 <span class="upload-btn-text">点击上传</span></div>
+            <div class="upload-hint">支持 WORD(.doc/.docx)、PDF(.pdf)、扫描件(.jpg/.png/.tif) 格式，可批量上传多个文件</div>
+          </div>
+          <input type="file" id="contractFileInput" accept=".doc,.docx,.pdf,.jpg,.jpeg,.png,.tif,.tiff" multiple style="display:none;" onchange="handleContractFileUpload(this)">
+
+          <!-- 已上传文件列表 -->
+          <div class="file-list-panel" id="contractFileList" style="display:none;"></div>
+
+          <div style="margin-top:15px;display:flex;gap:8px;justify-content:flex-end;" id="fileUploadActions">
+            <button class="btn btn-default" onclick="clearAllContractFiles()"><i class="fa-solid fa-trash-can"></i> 清空文件</button>
+            <button class="btn btn-primary" onclick="startExtractAll()" id="btnExtractAll" disabled><i class="fa-solid fa-wand-magic-sparkles"></i> 开始智能提取</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 提示信息 -->
+      <div class="row" style="margin-top:15px;">
+        <div class="col-md-4">
+          <div style="text-align:center;padding:20px;background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+            <i class="fa-solid fa-file-word" style="font-size:32px;color:#2B579A;"></i>
+            <h4 style="margin:10px 0 5px;font-size:14px;">Word 文档</h4>
+            <p style="font-size:12px;color:#888;margin:0;">.doc / .docx<br>提取准确率最高</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div style="text-align:center;padding:20px;background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+            <i class="fa-solid fa-file-pdf" style="font-size:32px;color:#DD4B39;"></i>
+            <h4 style="margin:10px 0 5px;font-size:14px;">PDF 文件</h4>
+            <p style="font-size:12px;color:#888;margin:0;">.pdf<br>支持文字版PDF提取</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div style="text-align:center;padding:20px;background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+            <i class="fa-solid fa-file-image" style="font-size:32px;color:#F39C12;"></i>
+            <h4 style="margin:10px 0 5px;font-size:14px;">扫描件/图片</h4>
+            <p style="font-size:12px;color:#888;margin:0;">.jpg / .png / .tif<br>OCR识别，建议高清</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步骤2&3：智能提取结果与确认入库 -->
+    <div id="importStep2Content" style="display:none;">
+      <!-- 提取进度总览 -->
+      <div class="fa-box info" id="extractProgressBox" style="display:none;">
+        <div class="box-header with-border">
+          <h3><i class="fa-solid fa-spinner fa-spin"></i> 智能提取进行中</h3>
+          <div class="box-tools">
+            <span style="font-size:12px;">已完成 <b id="extractDoneCount">0</b>/<b id="extractTotalCount">0</b></span>
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="import-progress-bar" style="height:12px;border-radius:6px;">
+            <div class="bar" id="extractProgressBar" style="width:0%;border-radius:6px;background:linear-gradient(90deg,var(--fa-primary),var(--fa-success));"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:#888;">
+            <span id="extractCurrentFile">正在提取...</span>
+            <span id="extractPercent">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 提取结果列表 -->
+      <div id="extractResultList">
+        <!-- JS动态渲染 -->
+      </div>
+
+      <!-- 底部操作栏 -->
+      <div class="fa-box" id="extractBottomBar" style="display:none;border-top-color:var(--fa-success);">
+        <div class="box-body" style="padding:12px 20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <span style="font-size:13px;color:#666;">
+                <i class="fa-solid fa-circle-check text-success"></i> 共 <b id="totalExtracted">0</b> 个文件已提取，
+                <span class="text-success">有效 <b id="validExtracted">0</b></span>，
+                <span class="text-danger">需补全 <b id="invalidExtracted">0</b></span>
+              </span>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-default" onclick="backToUploadStep()"><i class="fa-solid fa-arrow-left"></i> 继续上传</button>
+              <button class="btn btn-success" onclick="batchSubmitExtractResults()"><i class="fa-solid fa-check-double"></i> 批量提交全部入库</button>
+            </div>
+          </div>
+          <!-- 导入历史 -->
+          <div id="fileImportHistoryWrap" style="margin-top:12px;display:none;">
+            <div style="font-size:12px;color:#888;margin-bottom:6px;"><i class="fa-solid fa-clock-rotate-left"></i> 本次导入记录</div>
+            <div id="fileImportHistory" style="font-size:12px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 消息中心页面 ============ -->
+  <div id="pageNotifyCenter" style="display:none;">
+    <div class="page-header">
+      <h1>
+        <button class="btn btn-default btn-sm" onclick="switchPage('dashboard')" style="margin-right:10px;"><i class="fa-solid fa-arrow-left"></i></button>
+        消息中心 <small>通知提醒与消息管理</small>
+      </h1>
+      <div>
+        <button class="btn btn-default btn-sm" onclick="batchMarkRead()"><i class="fa-solid fa-check-double"></i> 全部标记已读</button>
+        <button class="btn btn-default btn-sm" onclick="renderNotifyCenterList()"><i class="fa-solid fa-rotate"></i> 刷新</button>
+      </div>
+    </div>
+
+    <!-- 统计概览 -->
+    <div class="msg-center-header">
+      <div class="msg-stats">
+        <div class="stat-item"><i class="fa-solid fa-envelope" style="color:var(--fa-primary);"></i> 总消息 <span class="stat-num" id="msgStatTotal">0</span></div>
+        <div class="stat-item"><i class="fa-solid fa-envelope-open" style="color:var(--fa-success);"></i> 已读 <span class="stat-num" id="msgStatRead" style="color:var(--fa-success);">0</span></div>
+        <div class="stat-item"><i class="fa-solid fa-circle-exclamation" style="color:var(--fa-danger);"></i> 未读 <span class="stat-num" id="msgStatUnread" style="color:var(--fa-danger);">0</span></div>
+      </div>
+    </div>
+
+    <!-- 消息类型Tab -->
+    <div class="msg-type-tabs" id="msgCenterTabs">
+      <div class="msg-type-tab active" data-type="all" onclick="switchMsgCenterTab('all',this)">
+        <i class="fa-solid fa-inbox msg-tab-icon"></i>全部<span class="msg-tab-count" id="msgTabCountAll"></span>
+      </div>
+      <div class="msg-type-tab" data-type="system" onclick="switchMsgCenterTab('system',this)">
+        <i class="fa-solid fa-gear msg-tab-icon"></i>系统通知<span class="msg-tab-count" id="msgTabCountSystem"></span>
+      </div>
+      <div class="msg-type-tab" data-type="audit" onclick="switchMsgCenterTab('audit',this)">
+        <i class="fa-solid fa-clipboard-check msg-tab-icon"></i>审核通知<span class="msg-tab-count" id="msgTabCountAudit"></span>
+      </div>
+      <div class="msg-type-tab" data-type="cc" onclick="switchMsgCenterTab('cc',this)">
+        <i class="fa-solid fa-share-from-square msg-tab-icon"></i>抄送通知<span class="msg-tab-count" id="msgTabCountCc"></span>
+      </div>
+      <div class="msg-type-tab" data-type="remind" onclick="switchMsgCenterTab('remind',this)">
+        <i class="fa-solid fa-clock msg-tab-icon"></i>提醒通知<span class="msg-tab-count" id="msgTabCountRemind"></span>
+      </div>
+      <div class="msg-type-tab" data-type="expire" onclick="switchMsgCenterTab('expire',this)">
+        <i class="fa-solid fa-hourglass-half msg-tab-icon"></i>到期通知<span class="msg-tab-count" id="msgTabCountExpire"></span>
+      </div>
+      <div class="msg-type-tab" data-type="change" onclick="switchMsgCenterTab('change',this)">
+        <i class="fa-solid fa-rotate msg-tab-icon"></i>变更通知<span class="msg-tab-count" id="msgTabCountChange"></span>
+      </div>
+    </div>
+
+    <!-- 筛选栏 -->
+    <div class="msg-filter-bar">
+      <div class="filter-group">
+        <span class="filter-label">状态：</span>
+        <select class="form-control" id="msgFilterStatus" onchange="renderNotifyCenterList()" style="width:100px;">
+          <option value="">全部</option>
+          <option value="unread">未读</option>
+          <option value="read">已读</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">搜索：</span>
+        <input type="text" class="form-control" id="msgFilterKeyword" placeholder="搜索消息标题/内容" style="width:200px;" oninput="renderNotifyCenterList()">
+      </div>
+      <div class="filter-group" style="margin-left:auto;">
+        <button class="btn btn-default btn-xs" onclick="resetMsgFilter()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+      </div>
+    </div>
+
+    <!-- 消息列表 -->
+    <div class="msg-list" id="msgCenterList">
+      <!-- JS动态渲染 -->
+    </div>
+
+    <!-- 分页 -->
+    <div class="msg-pagination" id="msgCenterPagination">
+      <div class="page-info">显示第 <span id="msgPageStart">1</span> 到 <span id="msgPageEnd">10</span> 条，共 <span id="msgPageTotal">0</span> 条</div>
+      <div class="pagination-btns" id="msgPageBtns"></div>
+    </div>
+  </div>
+
+  </div><!-- /content-wrapper -->
+</div><!-- /main-wrapper -->
+
+<!-- 审核操作栏（固定底部，放在body最外层） -->
+<div id="auditBottomBar" style="display:none;position:fixed;bottom:0;left:230px;right:0;z-index:9999;background:#fff;border-top:1px solid #E8ECF0;padding:12px 24px;box-shadow:0 -2px 8px rgba(0,0,0,0.08);align-items:center;justify-content:flex-end;gap:12px;">
+  <button class="btn btn-default" onclick="backToList()"><i class="fa-solid fa-arrow-left"></i> 返回</button>
+  <button class="btn btn-danger" id="btnAuditReject2" onclick="detailAuditReject()"><i class="fa-solid fa-xmark"></i> 驳回</button>
+  <button class="btn btn-success" id="btnAuditPass2" onclick="detailAuditPass()"><i class="fa-solid fa-check"></i> 通过</button>
+</div>
+
+<!-- ==================== 模态框：消息详情 ==================== -->
+<div class="modal fade msg-detail-modal" id="modalMsgDetail" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="md-title-area">
+          <div class="md-type-icon" id="mdTypeIcon"><i id="mdTypeIconI"></i></div>
+          <div class="md-title-text">
+            <h4 id="mdTitle"></h4>
+            <div class="md-time" id="mdTime"></div>
+          </div>
+        </div>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="md-info-grid" id="mdInfoGrid">
+          <!-- JS动态渲染 -->
+        </div>
+        <div class="md-body-content" id="mdBodyContent">
+          <!-- JS动态渲染 -->
+        </div>
+        <div class="md-link-area" id="mdLinkArea" style="display:none;">
+          <div class="md-link-info">
+            <i class="fa-solid fa-link"></i>
+            <div>
+              <div class="md-link-label" id="mdLinkLabel">关联合同</div>
+              <div class="md-link-name" id="mdLinkName"></div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="mdGoBtn" onclick="goToLinkedPage()"><i class="fa-solid fa-arrow-right"></i> 前往处理</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="md-footer-left">
+          <button class="btn btn-default btn-sm" id="mdPrevBtn" onclick="navigateMsg(-1)" title="上一条"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="btn btn-default btn-sm" id="mdNextBtn" onclick="navigateMsg(1)" title="下一条"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div>
+          <button class="btn btn-default btn-sm" onclick="toggleMsgReadStatus()" id="mdToggleReadBtn"><i class="fa-solid fa-envelope"></i> 标记未读</button>
+          <button class="btn btn-primary btn-sm" onclick="goToLinkedPage()" id="mdActionBtn"><i class="fa-solid fa-arrow-right"></i> 前往处理</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：为已有合同上传Word ==================== -->
+<div class="modal fade" id="modalDraftUploadWord" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-file-word" style="color:#2B579A;"></i> 上传Word替换合同内容</h4>
+      </div>
+      <div class="modal-body">
+        <div style="background:#F0F7FF;border:1px dashed #2B579A;border-radius:8px;padding:30px 20px;text-align:center;margin-bottom:20px;">
+          <i class="fa-solid fa-cloud-arrow-up" style="font-size:48px;color:#2B579A;display:block;margin-bottom:12px;"></i>
+          <p style="font-size:15px;font-weight:600;color:#333;margin-bottom:6px;">点击或拖拽上传Word文件</p>
+          <p style="font-size:12px;color:#999;margin-bottom:15px;">上传后将替换当前合同的在线编辑内容</p>
+          <input type="file" id="draftWordFile" accept=".doc,.docx" style="display:none;" onchange="onDraftWordFileSelected(this)">
+          <button class="btn btn-primary" onclick="document.getElementById('draftWordFile').click()"><i class="fa-solid fa-folder-open"></i> 选择文件</button>
+        </div>
+        <div id="draftWordFileInfo" style="display:none;">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#F5F7FA;border-radius:8px;border:1px solid #E8ECF0;">
+            <i class="fa-solid fa-file-word" style="font-size:32px;color:#2B579A;"></i>
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:600;color:#333;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="draftWordFileName">—</div>
+              <div style="font-size:11px;color:#999;margin-top:2px;" id="draftWordFileSize">—</div>
+            </div>
+            <button class="btn btn-default btn-sm" onclick="clearDraftWordFile()" title="移除文件"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+        <div style="background:#FFF9C4;padding:8px 12px;border-radius:4px;font-size:12px;color:#666;margin-top:12px;border-left:3px solid #FFC107;">
+          <i class="fa-solid fa-circle-info" style="color:#FFC107;"></i> 上传Word文件后，系统将自动解析文档内容并替换当前合同的在线编辑内容。
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-primary" onclick="applyDraftWordUpload()"><i class="fa-solid fa-check"></i> 确认上传并替换</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==================== 模态框：模板详情 ==================== -->
+<div class="modal fade" id="modalTemplateDetail" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-file-lines" style="color:var(--fa-primary);"></i> <span id="templateDetailName">模板详情</span></h4>
+      </div>
+      <div class="modal-body" style="max-height:70vh;overflow-y:auto;" id="templateDetailContent"></div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：编辑模板 ==================== -->
+<div class="modal fade" id="modalEditTemplate" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-pen-to-square" style="color:var(--fa-primary);"></i> 编辑模板</h4>
+      </div>
+      <div class="modal-body" style="max-height:70vh;overflow-y:auto;padding:15px;">
+        <input type="hidden" id="editTemplateId">
+        <h5 style="color:var(--fa-primary);border-bottom:2px solid var(--fa-primary);padding-bottom:6px;margin-bottom:15px;"><i class="fa-solid fa-pen-to-square"></i> 模板基本信息</h5>
+        <div class="row">
+          <div class="col-md-6"><div class="form-group"><label>模板名称 <span class="text-danger">*</span></label><input type="text" class="form-control" id="editTemplateName" placeholder="请输入模板名称"></div></div>
+          <div class="col-md-6"><div class="form-group"><label>模板类型 <span class="text-danger">*</span></label><select class="form-control" id="editTemplateType"><option value="">请选择</option><option>采购合同</option><option>服务合同</option><option>合作协议</option><option>租赁合同</option><option>其他</option></select></div></div>
+        </div>
+        <div class="row">
+          <div class="col-md-6"><div class="form-group"><label>适用类别</label><input type="text" class="form-control" id="editTemplateCategory" placeholder="请输入适用类别"></div></div>
+          <div class="col-md-6"><div class="form-group"><label>适用部门</label><select class="form-control" id="editTemplateDept"><option>采购部</option><option>运营部</option><option>法务部</option><option>财务部</option><option>行政部</option><option>总经办</option></select></div></div>
+        </div>
+        <div class="form-group" style="margin-bottom:0;"><label>模板说明</label><textarea class="form-control" rows="2" id="editTemplateDesc" placeholder="请输入模板说明"></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-primary" onclick="saveEditTemplate()"><i class="fa-solid fa-check"></i> 保存基本信息</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：新建模板 ==================== -->
+<div class="modal fade" id="modalCreateTemplate" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-plus" style="color:var(--fa-primary);"></i> 新建合同模板</h4>
+      </div>
+      <div class="modal-body" style="max-height:70vh;overflow-y:auto;padding:15px;">
+        <div class="row">
+          <div class="col-md-6"><div class="form-group"><label>模板名称 <span class="text-danger">*</span></label><input type="text" class="form-control" id="newTemplateName" placeholder="请输入模板名称"></div></div>
+          <div class="col-md-6"><div class="form-group"><label>模板类型 <span class="text-danger">*</span></label><select class="form-control" id="newTemplateType"><option value="">请选择</option><option>采购合同</option><option>服务合同</option><option>合作协议</option><option>租赁合同</option><option>其他</option></select></div></div>
+        </div>
+        <div class="row">
+          <div class="col-md-6"><div class="form-group"><label>适用类别</label><input type="text" class="form-control" id="newTemplateCategory" placeholder="请输入适用类别"></div></div>
+          <div class="col-md-6"><div class="form-group"><label>适用部门</label><select class="form-control" id="newTemplateDept"><option>采购部</option><option>运营部</option><option>法务部</option><option>财务部</option><option>行政部</option><option>总经办</option></select></div></div>
+        </div>
+        <div class="form-group"><label>模板说明</label><textarea class="form-control" rows="2" id="newTemplateDesc" placeholder="请输入模板说明"></textarea></div>
+
+        <!-- 创建方式 -->
+        <h5 style="color:var(--fa-primary);border-bottom:2px solid var(--fa-primary);padding-bottom:6px;margin:20px 0 15px;"><i class="fa-solid fa-wand-magic-sparkles"></i> 创建方式</h5>
+        <div class="row" style="margin-bottom:15px;">
+          <div class="col-md-6">
+            <div id="tplModeOnline" style="border:2px solid var(--fa-primary);border-radius:10px;padding:15px;text-align:center;cursor:pointer;background:#F0F7FF;transition:all .2s;" onclick="selectTemplateCreateMode('online')">
+              <i class="fa-solid fa-pen-nib" style="font-size:28px;color:var(--fa-primary);display:block;margin-bottom:6px;"></i>
+              <div style="font-size:14px;font-weight:600;color:#333;">在线创建</div>
+              <div style="font-size:12px;color:#888;">直接编辑模板内容</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div id="tplModeUpload" style="border:2px solid #E0E0E0;border-radius:10px;padding:15px;text-align:center;cursor:pointer;background:#fff;transition:all .2s;" onclick="selectTemplateCreateMode('upload')">
+              <i class="fa-solid fa-file-word" style="font-size:28px;color:#2B579A;display:block;margin-bottom:6px;"></i>
+              <div style="font-size:14px;font-weight:600;color:#333;">上传Word文件</div>
+              <div style="font-size:12px;color:#888;">从Word文件导入模板</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 在线创建区域 -->
+        <div id="templateCreateOnline">
+          <div style="background:#F0F7FF;border:1px solid var(--fa-primary);border-radius:8px;padding:20px;text-align:center;">
+            <i class="fa-solid fa-pen-nib" style="font-size:36px;color:var(--fa-primary);display:block;margin-bottom:10px;"></i>
+            <p style="font-size:14px;font-weight:600;color:#333;margin-bottom:6px;">点击"下一步"进入富文本编辑器</p>
+            <p style="font-size:12px;color:#888;margin:0;">您可以在编辑器中自由编辑模板内容，支持插入变量、表格、格式化等操作</p>
+          </div>
+          <input type="hidden" id="newTemplateContent" value="">
+        </div>
+        <!-- 上传Word区域 -->
+        <div id="templateCreateUpload" style="display:none;">
+          <div style="background:#F0F7FF;border:1px dashed #2B579A;border-radius:8px;padding:25px 20px;text-align:center;">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size:36px;color:#2B579A;display:block;margin-bottom:8px;"></i>
+            <p style="font-size:14px;font-weight:600;color:#333;margin-bottom:4px;">点击或拖拽上传Word文件</p>
+            <p style="font-size:12px;color:#999;margin-bottom:12px;">支持 .docx / .doc 格式</p>
+            <input type="file" id="newTemplateFile" accept=".doc,.docx" style="display:none;" onchange="onNewTemplateFileSelected(this)">
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('newTemplateFile').click()"><i class="fa-solid fa-folder-open"></i> 选择文件</button>
+          </div>
+          <div id="newTemplateFileInfo" style="display:none;margin-top:10px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#F5F7FA;border-radius:8px;border:1px solid #E8ECF0;">
+              <i class="fa-solid fa-file-word" style="font-size:24px;color:#2B579A;"></i>
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:600;color:#333;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="newTemplateFileName">—</div>
+                <div style="font-size:11px;color:#999;margin-top:2px;" id="newTemplateFileSize">—</div>
+              </div>
+              <button class="btn btn-default btn-sm" onclick="clearNewTemplateFile()" title="移除"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-primary" id="btnSaveNewTemplate" onclick="saveNewTemplate()"><i class="fa-solid fa-arrow-right"></i> 下一步</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：选择合同模板（新建合同时） ==================== -->
+<div class="modal fade" id="modalTemplateSelect" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-file-lines" style="color:var(--fa-primary);"></i> 选择合同模板</h4>
+      </div>
+      <div class="modal-body" style="max-height:60vh;overflow-y:auto;" id="templateSelectList"></div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-primary" id="btnConfirmTemplateSelect" onclick="confirmTemplateSelect()" disabled><i class="fa-solid fa-check"></i> 确认选择</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：新建合同 ==================== -->
+<div class="modal fade" id="modalCreateContract" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-file-contract"></i> 新建合同</h4>
+      </div>
+      <div class="modal-body" style="max-height:70vh;overflow-y:auto;padding:15px;">
+        <!-- 合同信息 -->
+        <h5 style="color:var(--fa-primary);border-bottom:2px solid var(--fa-primary);padding-bottom:6px;margin-bottom:15px;"><i class="fa-solid fa-file-contract"></i> 合同信息</h5>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>合同名称 <span class="text-danger">*</span></label><input type="text" class="form-control" id="createName" placeholder="请输入合同名称"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>合同编号</label><input type="text" class="form-control" id="createNo" placeholder="系统自动生成" readonly style="background:#F5F5F5;"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>合同主体 <span class="text-danger">*</span></label>
+              <select class="form-control" id="createSubject"><option value="">请选择合同主体</option></select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>合同类别 <span class="text-danger">*</span></label>
+              <select class="form-control" id="createType"><option value="">请选择</option><option>采购合同</option><option>服务合同</option><option>合作协议</option><option>租赁合同</option><option>其他</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>合同状态</label>
+              <select class="form-control" id="createStatus"><option value="draft">草稿</option><option value="approving">审批中</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>期限类型</label>
+              <select class="form-control" id="createTermType"><option>固定期限</option><option>无固定期限</option><option>以完成一定工作任务为期限</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>有效日期</label><input type="date" class="form-control" id="createValidDate"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>签订日期</label><input type="date" class="form-control" id="createSignDate"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>收支方向</label>
+              <select class="form-control" id="createDirection"><option>支出</option><option>收入</option><option>收支双向</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>计价方式</label>
+              <select class="form-control" id="createPricingMethod"><option>固定总价</option><option>固定单价</option><option>成本加酬金</option><option>暂估价</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>合同金额 <span class="text-danger">*</span></label><div class="input-group"><span class="input-group-addon">¥</span><input type="number" class="form-control" id="createAmount" placeholder="0.00"></div></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>币种</label>
+              <select class="form-control" id="createCurrency"><option>CNY（人民币）</option><option>USD（美元）</option><option>EUR（欧元）</option><option>GBP（英镑）</option><option>JPY（日元）</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>签署部门</label>
+              <select class="form-control" id="createDept"><option>采购部</option><option>运营部</option><option>法务部</option><option>财务部</option><option>行政部</option><option>总经办</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>履约地点</label><input type="text" class="form-control" id="createPerformPlace" placeholder="请输入履约地点"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>归档位置</label><input type="text" class="form-control" id="createArchiveLocation" placeholder="请输入归档位置"></div>
+          </div>
+        </div>
+        <div class="form-group"><label>合同概要</label><textarea class="form-control" rows="3" id="createSummary" placeholder="请输入合同概要说明"></textarea></div>
+        <div class="form-group"><label>签订文件</label>
+          <input type="file" id="createSignFile" multiple style="font-size:13px;">
+          <small class="text-muted">支持 PDF、Word、图片等格式，可多选上传</small>
+        </div>
+
+        <!-- 相对方信息 -->
+        <h5 style="color:var(--fa-primary);border-bottom:2px solid var(--fa-primary);padding-bottom:6px;margin:20px 0 15px;"><i class="fa-solid fa-handshake"></i> 相对方信息</h5>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>相对方 <span class="text-danger">*</span></label><input type="text" class="form-control" id="createCounterParty" placeholder="请输入相对方名称"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>相对方联系人</label><input type="text" class="form-control" id="createCounterContact" placeholder="请输入联系人姓名"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>相对方联系方式</label><input type="text" class="form-control" id="createCounterPhone" placeholder="请输入联系电话"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>相对方联系地址</label><input type="text" class="form-control" id="createCounterAddress" placeholder="请输入联系地址"></div>
+          </div>
+        </div>
+
+        <!-- 签订信息 -->
+        <h5 style="color:var(--fa-primary);border-bottom:2px solid var(--fa-primary);padding-bottom:6px;margin:20px 0 15px;"><i class="fa-solid fa-pen-nib"></i> 签订信息</h5>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>生效日期</label><input type="date" class="form-control" id="createEffectiveDate"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>送达日期</label><input type="date" class="form-control" id="createDeliveryDate"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>合同总份数</label><input type="number" class="form-control" id="createTotalCopies" placeholder="0" min="0"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>归档份数</label><input type="number" class="form-control" id="createArchiveCopies" placeholder="0" min="0"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>归档时间</label><input type="date" class="form-control" id="createArchiveDate"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>归档位置</label><input type="text" class="form-control" id="createArchiveLocationSign" placeholder="请输入归档位置"></div>
+          </div>
+        </div>
+
+        <!-- 合同内容方式 -->
+        <h5 style="color:var(--fa-primary);border-bottom:2px solid var(--fa-primary);padding-bottom:6px;margin:20px 0 15px;"><i class="fa-solid fa-file-pen"></i> 合同内容方式</h5>
+        <div class="row">
+          <div class="col-md-4">
+            <div id="createModeTemplate" class="create-mode-card" style="border:2px solid #E0E0E0;border-radius:10px;padding:18px;text-align:center;cursor:pointer;background:#fff;transition:all .2s;" onclick="selectCreateMode('template')">
+              <i class="fa-solid fa-file-lines" style="font-size:32px;color:var(--fa-primary);display:block;margin-bottom:8px;"></i>
+              <div style="font-size:14px;font-weight:600;color:#333;margin-bottom:3px;">从模板选择</div>
+              <div style="font-size:11px;color:#888;">基于已有模板快速创建</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="createModeOnline" class="create-mode-card" style="border:2px solid var(--fa-primary);border-radius:10px;padding:18px;text-align:center;cursor:pointer;background:#F0F7FF;transition:all .2s;" onclick="selectCreateMode('online')">
+              <i class="fa-solid fa-pen-nib" style="font-size:32px;color:var(--fa-primary);display:block;margin-bottom:8px;"></i>
+              <div style="font-size:14px;font-weight:600;color:#333;margin-bottom:3px;">在线编辑</div>
+              <div style="font-size:11px;color:#888;">使用在线编辑器直接起草</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="createModeWord" class="create-mode-card" style="border:2px solid #E0E0E0;border-radius:10px;padding:18px;text-align:center;cursor:pointer;background:#fff;transition:all .2s;" onclick="selectCreateMode('word')">
+              <i class="fa-solid fa-file-word" style="font-size:32px;color:#2B579A;display:block;margin-bottom:8px;"></i>
+              <div style="font-size:14px;font-weight:600;color:#333;margin-bottom:3px;">上传Word文件</div>
+              <div style="font-size:11px;color:#888;">上传已有Word文件解析</div>
+            </div>
+          </div>
+        </div>
+        <!-- 模板选择列表（内嵌，选择"从模板选择"时显示） -->
+        <div id="createTemplateListArea" style="display:none;margin-top:15px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <label style="font-size:13px;color:#666;margin:0;"><i class="fa-solid fa-file-lines" style="color:var(--fa-primary);"></i> 选择合同模板</label>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="text" class="form-control" id="createTemplateSearch" placeholder="搜索模板名称..." style="width:180px;height:28px;font-size:12px;" oninput="filterCreateTemplateList()">
+            </div>
+          </div>
+          <div id="createTemplateList" style="max-height:220px;overflow-y:auto;border:1px solid #E8ECF0;border-radius:8px;background:#FAFAFA;"></div>
+          <!-- 已选模板提示 -->
+          <div id="createTemplateSelected" style="display:none;margin-top:10px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#F0F7FF;border-radius:8px;border:1px solid var(--fa-primary);">
+              <i class="fa-solid fa-file-lines" style="font-size:22px;color:var(--fa-primary);"></i>
+              <div style="flex:1;">
+                <div style="font-size:12px;color:#888;">已选择模板：</div>
+                <div style="font-weight:600;color:#333;font-size:14px;" id="createTemplateSelectedName">—</div>
+              </div>
+              <button class="btn btn-default btn-sm" onclick="clearTemplateSelection()" title="重新选择"><i class="fa-solid fa-xmark"></i> 重新选择</button>
+            </div>
+          </div>
+        </div>
+        <!-- 上传Word区域（默认隐藏） -->
+        <div id="createWordUploadArea" style="display:none;margin-top:15px;">
+          <div style="background:#F0F7FF;border:1px dashed #2B579A;border-radius:8px;padding:25px 20px;text-align:center;">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size:40px;color:#2B579A;display:block;margin-bottom:10px;"></i>
+            <p style="font-size:14px;font-weight:600;color:#333;margin-bottom:4px;">点击或拖拽上传Word文件</p>
+            <p style="font-size:12px;color:#999;margin-bottom:12px;">支持 .docx / .doc 格式，文件大小不超过50MB</p>
+            <input type="file" id="createWordFile" accept=".doc,.docx" style="display:none;" onchange="onCreateWordFileSelected(this)">
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('createWordFile').click()"><i class="fa-solid fa-folder-open"></i> 选择文件</button>
+          </div>
+          <div id="createWordFileInfo" style="display:none;margin-top:10px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#F5F7FA;border-radius:8px;border:1px solid #E8ECF0;">
+              <i class="fa-solid fa-file-word" style="font-size:28px;color:#2B579A;"></i>
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:600;color:#333;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="createWordFileName">—</div>
+                <div style="font-size:11px;color:#999;margin-top:2px;" id="createWordFileSize">—</div>
+              </div>
+              <button class="btn btn-default btn-sm" onclick="clearCreateWordFile()" title="移除文件"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-default" onclick="createContractDraft()"><i class="fa-solid fa-save"></i> 保存草稿</button>
+        <button class="btn btn-primary" id="btnCreateNext" onclick="createContractNext()"><i class="fa-solid fa-arrow-right"></i> 下一步</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：编辑合同 ==================== -->
+<div class="modal fade" id="modalEditContract" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-pen-to-square"></i> 编辑合同</h4>
+      </div>
+      <div class="modal-body" style="max-height:70vh;overflow-y:auto;padding:15px;">
+        <!-- 合同信息 -->
+        <h5 style="color:var(--fa-primary);border-bottom:2px solid var(--fa-primary);padding-bottom:6px;margin-bottom:15px;"><i class="fa-solid fa-file-contract"></i> 合同信息</h5>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>合同名称 <span class="text-danger">*</span></label><input type="text" class="form-control" id="editName" placeholder="请输入合同名称"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>合同编号</label><input type="text" class="form-control" id="editNo" readonly style="background:#F5F5F5;"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>合同主体 <span class="text-danger">*</span></label>
+              <select class="form-control" id="editSubject"><option value="">请选择合同主体</option></select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>合同类别 <span class="text-danger">*</span></label>
+              <select class="form-control" id="editType"><option value="">请选择</option><option>采购合同</option><option>服务合同</option><option>合作协议</option><option>租赁合同</option><option>其他</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>期限类型</label>
+              <select class="form-control" id="editTermType"><option>固定期限</option><option>无固定期限</option><option>以完成一定工作任务为期限</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>有效日期</label><input type="date" class="form-control" id="editValidDate"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>签订日期</label><input type="date" class="form-control" id="editSignDate"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>收支方向</label>
+              <select class="form-control" id="editDirection"><option>支出</option><option>收入</option><option>收支双向</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>计价方式</label>
+              <select class="form-control" id="editPricingMethod"><option>固定总价</option><option>固定单价</option><option>成本加酬金</option><option>暂估价</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>合同金额 <span class="text-danger">*</span></label><div class="input-group"><span class="input-group-addon">¥</span><input type="number" class="form-control" id="editAmount" placeholder="0.00"></div></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>币种</label>
+              <select class="form-control" id="editCurrency"><option>CNY（人民币）</option><option>USD（美元）</option><option>EUR（欧元）</option><option>GBP（英镑）</option><option>JPY（日元）</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>签署部门</label>
+              <select class="form-control" id="editDept"><option>采购部</option><option>运营部</option><option>法务部</option><option>财务部</option><option>行政部</option><option>总经办</option></select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>履约地点</label><input type="text" class="form-control" id="editPerformPlace" placeholder="请输入履约地点"></div>
+          </div>
+        </div>
+        <div class="form-group"><label>合同概要</label><textarea class="form-control" rows="3" id="editSummary" placeholder="请输入合同概要说明"></textarea></div>
+
+        <!-- 相对方信息 -->
+        <h5 style="color:var(--fa-purple);border-bottom:2px solid var(--fa-purple);padding-bottom:6px;margin-bottom:15px;margin-top:20px;"><i class="fa-solid fa-handshake"></i> 相对方信息</h5>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>相对方 <span class="text-danger">*</span></label><input type="text" class="form-control" id="editCounterParty" placeholder="请输入相对方名称"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>相对方联系人</label><input type="text" class="form-control" id="editCounterContact" placeholder="请输入联系人姓名"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>相对方联系方式</label><input type="text" class="form-control" id="editCounterPhone" placeholder="请输入联系电话"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>相对方联系地址</label><input type="text" class="form-control" id="editCounterAddress" placeholder="请输入联系地址"></div>
+          </div>
+        </div>
+
+        <!-- 签订信息 -->
+        <h5 style="color:var(--fa-success);border-bottom:2px solid var(--fa-success);padding-bottom:6px;margin-bottom:15px;margin-top:20px;"><i class="fa-solid fa-pen-nib"></i> 签订信息</h5>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>生效日期</label><input type="date" class="form-control" id="editEffectiveDate"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>送达日期</label><input type="date" class="form-control" id="editDeliveryDate"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>合同总份数</label><input type="number" class="form-control" id="editTotalCopies" placeholder="0" min="0"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"><label>归档份数</label><input type="number" class="form-control" id="editArchiveCopies" placeholder="0" min="0"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>归档时间</label><input type="date" class="form-control" id="editArchiveDate"></div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"><label>归档位置</label><input type="text" class="form-control" id="editArchiveLocation" placeholder="请输入归档位置"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-success" onclick="saveEditContract()"><i class="fa-solid fa-floppy-disk"></i> 保存</button>
+        <button class="btn btn-primary" onclick="saveEditAndNextStep()"><i class="fa-solid fa-file-pen"></i> 编辑合同内容</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：转办 ==================== -->
+<div class="modal fade" id="modalTransfer" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-share"></i> 转办处理</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>转交给 <span class="text-danger">*</span></label>
+          <select class="form-control" id="transferTo">
+            <option value="">请选择转交人员</option>
+            <option>王律师（法务部）</option>
+            <option>赵主管（财务部）</option>
+            <option>陈总监（运营部）</option>
+            <option>刘经理（行政部）</option>
+          </select>
+        </div>
+        <div class="form-group"><label>转办意见</label><textarea class="form-control" rows="3" id="transferOpinion" placeholder="请输入转办原因..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-warning" onclick="confirmTransfer()"><i class="fa-solid fa-share"></i> 确认转办</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：驳回 ==================== -->
+<div class="modal fade" id="modalReject" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background:var(--fa-danger);">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-xmark"></i> 驳回合同</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>驳回原因 <span class="text-danger">*</span></label><textarea class="form-control" rows="3" id="rejectReason" placeholder="请详细说明驳回原因..."></textarea></div>
+        <div class="quick-opinion">
+          <span class="tag" onclick="document.getElementById('rejectReason').value='合同条款不符合公司规定，请修改后重新提交。'">条款不合规</span>
+          <span class="tag" onclick="document.getElementById('rejectReason').value='合同金额超出预算，请重新核算。'">超预算</span>
+          <span class="tag" onclick="document.getElementById('rejectReason').value='缺少必要的附件材料，请补充后重新提交。'">材料不全</span>
+          <span class="tag" onclick="document.getElementById('rejectReason').value='乙方资质存在问题，请核实后重新提交。'">资质问题</span>
+        </div>
+        <p class="text-muted" style="font-size:11px;margin-top:8px;"><i class="fa-solid fa-circle-info"></i> 驳回后该审批记录即处理完成，不再出现在待审核列表中。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-danger" onclick="confirmReject()"><i class="fa-solid fa-xmark"></i> 确认驳回</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：沟通 ==================== -->
+<div class="modal fade" id="modalCommunicate" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background:var(--fa-info);">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-comments"></i> 在线沟通</h4>
+      </div>
+      <div class="modal-body" style="max-height:350px;overflow-y:auto;" id="chatMessages">
+        <div style="text-align:center;color:#999;font-size:12px;margin-bottom:10px;">—— 沟通记录 ——</div>
+      </div>
+      <div class="modal-footer" style="display:flex;gap:8px;padding:10px 18px;">
+        <input type="text" class="form-control" id="chatInput" placeholder="输入沟通内容..." style="flex:1;" onkeydown="if(event.key==='Enter')sendMessage()">
+        <button class="btn btn-info" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i> 发送</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：追加处理人 ==================== -->
+<div class="modal fade" id="modalAddHandler" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background:var(--fa-purple);">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-user-plus"></i> 追加处理人</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>选择追加处理人 <span class="text-danger">*</span></label>
+          <select class="form-control" id="addHandlerSelect" multiple style="height:120px;">
+            <option>王律师（法务部）</option>
+            <option>赵主管（财务部）</option>
+            <option>陈总监（运营部）</option>
+            <option>刘经理（行政部）</option>
+            <option>孙助理（总经办）</option>
+          </select>
+          <small class="text-muted">按住Ctrl可多选</small>
+        </div>
+        <div class="form-group"><label>追加原因</label><textarea class="form-control" rows="2" id="addHandlerReason" placeholder="说明追加处理人的原因..."></textarea></div>
+        <div class="form-group">
+          <label style="display:flex;align-items:center;gap:6px;font-weight:normal;cursor:pointer;">
+            <input type="checkbox" id="addHandlerRequired"> 必须处理（选中则新处理人也必须审批通过）
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-purple" onclick="confirmAddHandler()"><i class="fa-solid fa-user-plus"></i> 确认追加</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：撤回确认 ==================== -->
+<div class="modal fade" id="modalWithdraw" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header" style="background:#777;">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-rotate-left"></i> 撤回确认</h4>
+      </div>
+      <div class="modal-body">
+        <p>确认撤回该合同审批流程吗？</p>
+        <p class="text-muted" style="font-size:12px;">撤回后合同状态将变为"草稿"，需要重新发起审批。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-default" style="background:#777;color:#fff;" onclick="confirmWithdraw()">确认撤回</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：跳过确认 ==================== -->
+<div class="modal fade" id="modalSkip" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header" style="background:var(--fa-purple);">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-forward"></i> 同处理人跳过</h4>
+      </div>
+      <div class="modal-body">
+        <p>检测到当前处理人与上一节点为同一人，是否跳过当前节点？</p>
+        <p class="text-muted" style="font-size:12px;">跳过后将直接流转至下一审批节点。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-purple" onclick="confirmSkip()">确认跳过</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：查看审核记录 ==================== -->
+<div class="modal fade" id="modalAuditRecord" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa-solid fa-clock-rotate-left"></i> 审核记录 — <span id="auditRecordContractNo"></span></h4>
+      </div>
+      <div class="modal-body" style="max-height:450px;overflow-y:auto;">
+        <div class="timeline" id="auditRecordTimeline"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button class="btn btn-primary" onclick="printAuditRecord()"><i class="fa-solid fa-print"></i> 打印审核记录</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 模态框：新建/编辑审核流程 ==================== -->
+<div class="modal fade" id="modalFlowConfig" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="flowConfigTitle"><i class="fa-solid fa-sliders"></i> 新建审核流程</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group"><label>流程名称 <span class="text-danger">*</span></label><input type="text" class="form-control" id="flowName" placeholder="如：标准合同审批流程"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group"><label>适用合同类型 <span class="text-danger">*</span></label>
+              <select class="form-control" id="flowContractType"><option>采购合同</option><option>服务合同</option><option>合作协议</option><option>租赁合同</option><option>其他</option></select>
+            </div>
+          </div>
+        </div>
+        <!-- 金额条件触发 -->
+        <div class="row" style="margin-top:10px;">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label><i class="fa-solid fa-coins" style="color:var(--fa-warning);margin-right:4px;"></i> 金额条件触发 <small class="text-muted">（根据合同金额自动匹配审核流程，留空表示不限制）</small></label>
+              <div style="margin-top:8px;padding:15px;background:#FAFAFA;border:1px solid #E0E0E0;border-radius:6px;">
+                <!-- 条件类型 -->
+                <div class="row" style="margin-bottom:12px;">
+                  <div class="col-md-3">
+                    <div class="form-group" style="margin-bottom:0;">
+                      <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">条件类型</label>
+                      <select class="form-control" id="flowAmountCondType" onchange="onFlowAmountCondTypeChange()">
+                        <option value="">不限金额</option>
+                        <option value="fixed">固定金额</option>
+                        <option value="range">金额范围</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <!-- 固定金额模式 -->
+                <div id="flowAmountFixedSection" style="display:none;">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">判断条件</label>
+                      <select class="form-control" id="flowAmountFixedOp" onchange="updateFlowAmountPreview()">
+                        <option value="gt">大于（>）</option>
+                        <option value="gte">大于等于（≥）</option>
+                        <option value="lt">小于（<）</option>
+                        <option value="lte">小于等于（≤）</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">金额（元）</label>
+                      <input type="number" class="form-control" id="flowAmountFixedValue" placeholder="请输入金额" min="0" oninput="updateFlowAmountPreview()">
+                    </div>
+                  </div>
+                </div>
+                <!-- 金额范围模式 -->
+                <div id="flowAmountRangeSection" style="display:none;">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">下限条件</label>
+                      <div style="display:flex;gap:6px;">
+                        <select class="form-control" id="flowAmountRangeMinOp" onchange="updateFlowAmountPreview()" style="width:140px;flex-shrink:0;">
+                          <option value="gte">大于等于（≥）</option>
+                          <option value="gt">大于（>）</option>
+                        </select>
+                        <div class="input-group" style="flex:1;">
+                          <input type="number" class="form-control" id="flowAmountRangeMin" placeholder="最低金额" min="0" oninput="updateFlowAmountPreview()">
+                          <span class="input-group-addon">元</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1" style="text-align:center;">
+                      <label style="font-size:12px;color:transparent;margin-bottom:4px;display:block;">-</label>
+                      <div style="height:34px;line-height:34px;color:#999;font-weight:600;font-size:16px;">且</div>
+                    </div>
+                    <div class="col-md-5">
+                      <label style="font-size:12px;color:#666;margin-bottom:4px;display:block;">上限条件</label>
+                      <div style="display:flex;gap:6px;">
+                        <select class="form-control" id="flowAmountRangeMaxOp" onchange="updateFlowAmountPreview()" style="width:140px;flex-shrink:0;">
+                          <option value="lt">小于（<）</option>
+                          <option value="lte">小于等于（≤）</option>
+                        </select>
+                        <div class="input-group" style="flex:1;">
+                          <input type="number" class="form-control" id="flowAmountRangeMax" placeholder="最高金额" min="0" oninput="updateFlowAmountPreview()">
+                          <span class="input-group-addon">元</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <small class="text-muted" style="display:block;margin-top:8px;"><i class="fa-solid fa-circle-info"></i> 提交审批时，系统将根据合同金额自动匹配对应流程。例如：金额≥10万且<50万走简易流程，≥50万走标准流程。</small>
+            </div>
+          </div>
+        </div>
+        <!-- 审核节点设置（统一配置，每个节点可选择审核类型） -->
+        <div class="form-group" id="nodeSection">
+          <label>审核节点设置 <span class="text-danger">*</span></label>
+          <div id="flowNodesContainer" style="border:1px solid #E0E0E0;border-radius:4px;padding:12px;background:#FAFAFA;"></div>
+          <button class="btn btn-xs btn-primary" onclick="addFlowNode()" style="margin-top:8px;"><i class="fa-solid fa-plus"></i> 添加审核节点</button>
+          <small class="text-muted" style="margin-left:8px;">每个节点可独立配置审核类型：或签（一名成员同意即可）或会签（须全部同意）</small>
+        </div>
+        <div class="form-group">
+          <label>抄送设置 <small class="text-muted">（审批全部通过后抄送）</small></label>
+          <div style="border:1px solid #E0E0E0;border-radius:4px;padding:12px;background:#FAFAFA;">
+            <label style="font-size:12px;color:#666;margin-bottom:4px;">抄送人员</label>
+            <div class="tag-multi-select" id="ccTagSelect">
+              <input type="text" class="tag-input" placeholder="点击选择抄送人..." onfocus="toggleCcDropdown(true)" onkeyup="filterCcOptions()">
+              <div class="tag-dropdown" id="ccDropdown"></div>
+            </div>          </div>
+        </div>
+        <div class="form-group"><label>备注说明</label><textarea class="form-control" rows="2" id="flowRemark" placeholder="流程使用说明..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">取消</button>
+        <button class="btn btn-primary" onclick="saveFlowConfig()"><i class="fa-solid fa-save"></i> 保存流程</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 脚本 ==================== -->
+
+
+<!-- ==================== 脚本 ==================== -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script src="js/data.js"></script>
+<script src="js/entity.js"></script>
+<script src="js/core.js"></script>
+<script src="js/contract-list.js"></script>
+<script src="js/contract-detail.js"></script>
+<script src="js/contract-draft.js"></script>
+    <script src="js/contract-template.js"></script>
+<script src="js/contract-create.js"></script>
+<script src="js/version.js"></script>
+<script src="js/contract-approval.js"></script>
+<script src="js/no-rule.js"></script>
+<script src="js/operation-log.js"></script>
+<script src="js/audit-flow.js"></script>
+<script src="js/excel-import.js"></script>
+<script src="js/invoice.js"></script>
+<script src="js/file-import.js"></script>
+<script src="js/collab-edit.js"></script>
+<script src="js/notify.js"></script>
+
+<script>
+// 初始化
+switchPage('dashboard');
+updateNotifyBadge();
+updateTabBadges();
+</script>
+</body>
+</html>
