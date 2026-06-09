@@ -1,7 +1,20 @@
 ﻿// ==================== 合同起草页面 ====================
+function getDraftList() {
+  var status = $('#draftSearchStatus').val();
+  var name = $('#draftSearchName').val().toLowerCase();
+  var no = $('#draftSearchNo').val().toLowerCase();
+  var type = $('#draftSearchType').val();
+  var list = contracts;
+  if (status) list = list.filter(function(c){ return c.status === status; });
+  if (name) list = list.filter(function(c){ return c.name.toLowerCase().indexOf(name) >= 0; });
+  if (no) list = list.filter(function(c){ return c.no.toLowerCase().indexOf(no) >= 0; });
+  if (type) list = list.filter(function(c){ return (c.category||c.type) === type; });
+  return list;
+}
+
 function renderDraftTable(list) {
   if (!list) {
-    list = contracts.filter(function(c){ return c.status === 'draft'; });
+    list = getDraftList();
   }
   let html = '';
   if (list.length === 0) {
@@ -135,17 +148,7 @@ function submitDraftToApproval(id) {
 }
 
 function applyDraftFilter() {
-  let name = $('#draftSearchName').val().toLowerCase();
-  let no = $('#draftSearchNo').val().toLowerCase();
-  let type = $('#draftSearchType').val();
-  let filtered = contracts.filter(function(c){
-    if (c.status !== 'draft') return false;
-    if (name && c.name.toLowerCase().indexOf(name) === -1) return false;
-    if (no && c.no.toLowerCase().indexOf(no) === -1) return false;
-    if (type && (c.category||c.type) !== type) return false;
-    return true;
-  });
-  renderDraftTable(filtered);
+  renderDraftTable();
 }
 
 function resetDraftFilter() {

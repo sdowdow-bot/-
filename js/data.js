@@ -1,4 +1,4 @@
-﻿// ==================== 数据模型 ====================
+// ==================== 数据模型 ====================
 
 // 合同状态枚举
 const STATUS = {
@@ -6,23 +6,23 @@ const STATUS = {
   APPROVING: 'approving',
   APPROVED: 'approved',
   REJECTED: 'rejected',
-  SEALING: 'sealing',
+  SEALING: 'signing',
   SEALED: 'sealed',
-  ARCHIVING: 'archiving',
-  ARCHIVED: 'archived',
+  ARCHIVING: 'sealed',
+  ARCHIVED: 'sealed',
   WITHDRAWN: 'withdrawn'
 };
 
 const STATUS_LABEL = {
   draft: '草稿',
-  approving: '审批中',
+  approving: '审核中',
   approved: '已通过',
   rejected: '已驳回',
-  sealing: '用印签署中',
+  withdrawn: '已撤销',
+  pendingSign: '待签署',
+  signing: '签署中',
   sealed: '已签署',
-  archiving: '归档中',
-  archived: '已归档',
-  withdrawn: '已撤回'
+  rejectedSign: '已拒签'
 };
 
 const STATUS_CLASS = {
@@ -30,11 +30,11 @@ const STATUS_CLASS = {
   approving: 'status-approving',
   approved: 'status-approved',
   rejected: 'status-rejected',
-  sealing: 'status-sealing',
+  withdrawn: 'status-withdrawn',
+  pendingSign: 'status-pendingSign',
+  signing: 'status-signing',
   sealed: 'status-sealed',
-  archiving: 'status-archiving',
-  archived: 'status-archived',
-  withdrawn: 'status-withdrawn'
+  rejectedSign: 'status-rejectedSign'
 };
 
 const AUDIT_STATUS_LABEL = {
@@ -58,10 +58,10 @@ let contracts = [
   { id:1, no:'HT-2026-0001', name:'医疗器械采购合同', subject:'XX科技有限公司', category:'采购合同', status:'approving', auditStatus:'pending', termType:'固定期限', validDate:'2026-05-15 至 2027-05-14', signDate:'2026-05-15', direction:'支出', pricingMethod:'固定总价', handler:'张经理', amount:580000, currency:'CNY', signDept:'采购部', performPlace:'北京市朝阳区', summary:'采购医疗器械一批，包含监护仪、输液泵等设备', counterParty:'北京康医疗器械有限公司', counterContact:'李明', counterPhone:'010-88886666', counterAddress:'北京市海淀区中关村南大街5号', effectiveDate:'2026-05-15', deliveryDate:'2026-05-20', totalCopies:4, archiveCopies:2, archiveTime:'', archiveLocation:'', attachmentName:'医疗器械采购合同.pdf', createTime:'2026-05-10 14:30:00', updateTime:'2026-05-12 09:00:00', currentHandler:'李总监（法务部）', currentNode:'法务审批', progress:65, partyA:'XX科技有限公司', partyB:'北京康医疗器械有限公司', type:'采购合同', startDate:'2026-05-15', endDate:'2027-05-14' },
   { id:2, no:'HT-2026-0002', name:'上门护理服务合作协议', subject:'XX科技有限公司', category:'服务合同', status:'approving', auditStatus:'pending', termType:'固定期限', validDate:'2026-05-20 至 2027-05-19', signDate:'2026-05-20', direction:'支出', pricingMethod:'按次计费', handler:'王主管', amount:120000, currency:'CNY', signDept:'运营部', performPlace:'上海市浦东新区', summary:'居家护理服务合作，提供上门护理服务', counterParty:'仁心护理服务有限公司', counterContact:'张华', counterPhone:'021-66668888', counterAddress:'上海市浦东新区陆家嘴环路1000号', effectiveDate:'2026-05-20', deliveryDate:'2026-05-22', totalCopies:3, archiveCopies:1, archiveTime:'', archiveLocation:'', attachmentName:'上门护理服务合作协议.docx', createTime:'2026-05-11 09:15:00', updateTime:'2026-05-13 10:30:00', currentHandler:'刘总（总经理）', currentNode:'总经理审批', progress:90, partyA:'XX科技有限公司', partyB:'仁心护理服务有限公司', type:'服务合同', startDate:'2026-05-20', endDate:'2027-05-19' },
   { id:3, no:'HT-2026-0003', name:'医疗设备租赁合同', subject:'XX科技有限公司', category:'租赁合同', status:'approved', auditStatus:'approved', termType:'固定期限', validDate:'2026-06-01 至 2028-05-31', signDate:'2026-06-01', direction:'支出', pricingMethod:'按月计费', handler:'赵助理', amount:350000, currency:'CNY', signDept:'行政部', performPlace:'广州市天河区', summary:'租赁医疗设备含CT机、MRI设备等', counterParty:'华信医疗器械租赁有限公司', counterContact:'王刚', counterPhone:'020-33335555', counterAddress:'广州市天河区珠江新城华夏路30号', effectiveDate:'2026-06-01', deliveryDate:'2026-06-05', totalCopies:4, archiveCopies:2, archiveTime:'2026-06-10 14:00:00', archiveLocation:'档案室A区-03柜', createTime:'2026-05-08 11:00:00', updateTime:'2026-06-10 14:00:00', currentHandler:'李总监（法务部）', currentNode:'已完成', progress:100, partyA:'XX科技有限公司', partyB:'华信医疗器械租赁有限公司', type:'租赁合同', startDate:'2026-06-01', endDate:'2028-05-31' },
-  { id:4, no:'HT-2026-0004', name:'药品供应合作协议', subject:'XX科技有限公司', category:'合作协议', status:'sealing', auditStatus:'approved', termType:'固定期限', validDate:'2026-06-15 至 2029-06-14', signDate:'2026-06-15', direction:'支出', pricingMethod:'按量计费', handler:'张经理', amount:2000000, currency:'CNY', signDept:'采购部', performPlace:'武汉市洪山区', summary:'药品长期供应合作，涵盖常用药品及特殊药品', counterParty:'九州通医药集团', counterContact:'陈伟', counterPhone:'027-87654321', counterAddress:'武汉市洪山区光谷大道77号', effectiveDate:'2026-06-15', deliveryDate:'2026-06-18', totalCopies:6, archiveCopies:3, archiveTime:'', archiveLocation:'', createTime:'2026-05-05 16:20:00', updateTime:'2026-05-20 11:00:00', currentHandler:'陈主管（用印管理处）', currentNode:'用印签署', progress:100, partyA:'XX科技有限公司', partyB:'九州通医药集团', type:'合作协议', startDate:'2026-06-15', endDate:'2029-06-14' },
-  { id:5, no:'HT-2026-0005', name:'信息系统维护服务合同', subject:'XX科技有限公司', category:'服务合同', status:'archiving', auditStatus:'approved', termType:'固定期限', validDate:'2026-04-01 至 2027-03-31', signDate:'2026-04-01', direction:'支出', pricingMethod:'固定总价', handler:'孙工', amount:86000, currency:'CNY', signDept:'IT部', performPlace:'深圳市南山区', summary:'信息系统年度维护服务，含7×24小时技术支持', counterParty:'云智科技有限公司', counterContact:'刘洋', counterPhone:'0755-22224444', counterAddress:'深圳市南山区科技园南区R2-B栋', effectiveDate:'2026-04-01', deliveryDate:'2026-04-03', totalCopies:3, archiveCopies:1, archiveTime:'', archiveLocation:'', createTime:'2026-03-25 10:00:00', updateTime:'2026-04-02 16:00:00', currentHandler:'刘经理（档案室）', currentNode:'合同存档', progress:100, partyA:'XX科技有限公司', partyB:'云智科技有限公司', type:'服务合同', startDate:'2026-04-01', endDate:'2027-03-31' },
+  { id:4, no:'HT-2026-0004', name:'药品供应合作协议', subject:'XX科技有限公司', category:'合作协议', status:'signing', auditStatus:'approved', termType:'固定期限', validDate:'2026-06-15 至 2029-06-14', signDate:'2026-06-15', direction:'支出', pricingMethod:'按量计费', handler:'张经理', amount:2000000, currency:'CNY', signDept:'采购部', performPlace:'武汉市洪山区', summary:'药品长期供应合作，涵盖常用药品及特殊药品', counterParty:'九州通医药集团', counterContact:'陈伟', counterPhone:'027-87654321', counterAddress:'武汉市洪山区光谷大道77号', effectiveDate:'2026-06-15', deliveryDate:'2026-06-18', totalCopies:6, archiveCopies:3, archiveTime:'', archiveLocation:'', createTime:'2026-05-05 16:20:00', updateTime:'2026-05-20 11:00:00', currentHandler:'陈主管（用印管理处）', currentNode:'用印签署', progress:100, partyA:'XX科技有限公司', partyB:'九州通医药集团', type:'合作协议', startDate:'2026-06-15', endDate:'2029-06-14' },
+  { id:5, no:'HT-2026-0005', name:'信息系统维护服务合同', subject:'XX科技有限公司', category:'服务合同', status:'sealed', auditStatus:'approved', termType:'固定期限', validDate:'2026-04-01 至 2027-03-31', signDate:'2026-04-01', direction:'支出', pricingMethod:'固定总价', handler:'孙工', amount:86000, currency:'CNY', signDept:'IT部', performPlace:'深圳市南山区', summary:'信息系统年度维护服务，含7×24小时技术支持', counterParty:'云智科技有限公司', counterContact:'刘洋', counterPhone:'0755-22224444', counterAddress:'深圳市南山区科技园南区R2-B栋', effectiveDate:'2026-04-01', deliveryDate:'2026-04-03', totalCopies:3, archiveCopies:1, archiveTime:'', archiveLocation:'', createTime:'2026-03-25 10:00:00', updateTime:'2026-04-02 16:00:00', currentHandler:'刘经理（档案室）', currentNode:'合同存档', progress:100, partyA:'XX科技有限公司', partyB:'云智科技有限公司', type:'服务合同', startDate:'2026-04-01', endDate:'2027-03-31' },
   { id:6, no:'HT-2026-0006', name:'康复辅具采购合同', subject:'XX科技有限公司', category:'采购合同', status:'rejected', auditStatus:'rejected', termType:'固定期限', validDate:'2026-05-25 至 2027-05-24', signDate:'2026-05-25', direction:'支出', pricingMethod:'固定总价', handler:'张经理', amount:450000, currency:'CNY', signDept:'采购部', performPlace:'成都市武侯区', summary:'康复辅具采购，含轮椅、助行器等', counterParty:'康复之家医疗用品有限公司', counterContact:'赵磊', counterPhone:'028-55557777', counterAddress:'成都市武侯区人民南路四段1号', effectiveDate:'', deliveryDate:'', totalCopies:4, archiveCopies:0, archiveTime:'', archiveLocation:'', createTime:'2026-04-28 13:45:00', updateTime:'2026-04-29 10:00:00', currentHandler:'张经理（采购部）', currentNode:'已驳回', progress:30, partyA:'XX科技有限公司', partyB:'康复之家医疗用品有限公司', type:'采购合同', startDate:'2026-05-25', endDate:'2027-05-24' },
-  { id:7, no:'HT-2026-0007', name:'物流配送服务合同', subject:'XX科技有限公司', category:'服务合同', status:'archived', auditStatus:'approved', termType:'固定期限', validDate:'2026-07-01 至 2028-06-30', signDate:'2026-07-01', direction:'支出', pricingMethod:'按单计费', handler:'陈总监', amount:180000, currency:'CNY', signDept:'运营部', performPlace:'杭州市余杭区', summary:'医疗物资物流配送服务，覆盖华东地区', counterParty:'顺风物流有限公司', counterContact:'周强', counterPhone:'0571-99998888', counterAddress:'杭州市余杭区仓前街道文一西路1218号', effectiveDate:'2026-07-01', deliveryDate:'2026-07-02', totalCopies:4, archiveCopies:2, archiveTime:'2026-07-15 09:30:00', archiveLocation:'档案室B区-07柜', createTime:'2026-03-10 08:30:00', updateTime:'2026-07-15 09:30:00', currentHandler:'李总监（法务部）', currentNode:'已归档', progress:100, partyA:'XX科技有限公司', partyB:'顺风物流有限公司', type:'服务合同', startDate:'2026-07-01', endDate:'2028-06-30' },
+  { id:7, no:'HT-2026-0007', name:'物流配送服务合同', subject:'XX科技有限公司', category:'服务合同', status:'sealed', auditStatus:'approved', termType:'固定期限', validDate:'2026-07-01 至 2028-06-30', signDate:'2026-07-01', direction:'支出', pricingMethod:'按单计费', handler:'陈总监', amount:180000, currency:'CNY', signDept:'运营部', performPlace:'杭州市余杭区', summary:'医疗物资物流配送服务，覆盖华东地区', counterParty:'顺风物流有限公司', counterContact:'周强', counterPhone:'0571-99998888', counterAddress:'杭州市余杭区仓前街道文一西路1218号', effectiveDate:'2026-07-01', deliveryDate:'2026-07-02', totalCopies:4, archiveCopies:2, archiveTime:'2026-07-15 09:30:00', archiveLocation:'档案室B区-07柜', createTime:'2026-03-10 08:30:00', updateTime:'2026-07-15 09:30:00', currentHandler:'李总监（法务部）', currentNode:'已归档', progress:100, partyA:'XX科技有限公司', partyB:'顺风物流有限公司', type:'服务合同', startDate:'2026-07-01', endDate:'2028-06-30' },
   { id:8, no:'HT-2026-0008', name:'健康管理平台开发合同', subject:'XX科技有限公司', category:'合作协议', status:'sealed', auditStatus:'approved', termType:'固定期限', validDate:'2026-06-30 至 2028-06-29', signDate:'2026-06-30', direction:'支出', pricingMethod:'里程碑付款', handler:'孙工', amount:960000, currency:'CNY', signDept:'IT部', performPlace:'南京市建邺区', summary:'健康管理平台定制开发，含APP及后台管理系统', counterParty:'数字健康科技有限公司', counterContact:'吴芳', counterPhone:'025-77776666', counterAddress:'南京市建邺区河西大街198号', effectiveDate:'2026-06-30', deliveryDate:'2026-07-05', totalCopies:6, archiveCopies:3, archiveTime:'', archiveLocation:'', createTime:'2026-04-15 09:00:00', updateTime:'2026-07-01 10:00:00', currentHandler:'刘总（总经理）', currentNode:'已签署', progress:100, partyA:'XX科技有限公司', partyB:'数字健康科技有限公司', type:'合作协议', startDate:'2026-06-30', endDate:'2028-06-29' },
   { id:9, no:'HT-2026-0009', name:'护理耗材年度采购合同', subject:'XX科技有限公司', category:'采购合同', status:'draft', auditStatus:'none', termType:'固定期限', validDate:'2026-08-01 至 2027-07-31', signDate:'2026-08-01', direction:'支出', pricingMethod:'按量计费', handler:'张经理', amount:320000, currency:'CNY', signDept:'采购部', performPlace:'北京市大兴区', summary:'护理耗材年度采购，含注射器、敷料等', counterParty:'恒安医疗用品有限公司', counterContact:'孙丽', counterPhone:'010-66665555', counterAddress:'北京市大兴区生物医药基地天荣街9号', effectiveDate:'', deliveryDate:'', totalCopies:4, archiveCopies:0, archiveTime:'', archiveLocation:'', createTime:'2026-05-13 15:00:00', updateTime:'2026-05-13 15:00:00', currentHandler:'—', currentNode:'—', progress:0, partyA:'XX科技有限公司', partyB:'恒安医疗用品有限公司', type:'采购合同', startDate:'2026-08-01', endDate:'2027-07-31' },
   { id:10, no:'HT-2026-0010', name:'体检服务合作合同', subject:'XX科技有限公司', category:'服务合同', status:'withdrawn', auditStatus:'withdrawn', termType:'固定期限', validDate:'2026-09-01 至 2028-08-31', signDate:'2026-09-01', direction:'支出', pricingMethod:'按人次计费', handler:'赵助理', amount:500000, currency:'CNY', signDept:'行政部', performPlace:'天津市和平区', summary:'员工年度体检服务合作', counterParty:'美年大健康', counterContact:'钱进', counterPhone:'022-33334444', counterAddress:'天津市和平区南京路189号', effectiveDate:'', deliveryDate:'', totalCopies:3, archiveCopies:0, archiveTime:'', archiveLocation:'', createTime:'2026-04-20 10:30:00', updateTime:'2026-04-22 14:00:00', currentHandler:'赵助理（行政部）', currentNode:'已撤回', progress:15, partyA:'XX科技有限公司', partyB:'美年大健康', type:'服务合同', startDate:'2026-09-01', endDate:'2028-08-31' }

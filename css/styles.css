@@ -407,6 +407,9 @@ body {
 .status-archiving { background: #FFF8E1; color: #F57F17; }
 .status-archived { background: #E8EAF6; color: #1A237E; }
 .status-withdrawn { background: #EFEBE9; color: #3E2723; }
+.status-pendingSign { background: #E8F5E9; color: #1B5E20; }
+.status-signing { background: #E3F2FD; color: #0D47A1; }
+.status-rejectedSign { background: #FFEBEE; color: #B71C1C; }
 
 /* ============ 开关控件 ============ */
 .switch {
@@ -2301,4 +2304,139 @@ body {
   transform: translateX(18px);
 }
 
-</style>
+/* ============ 首页看板（个人工作台） ============ */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.dashboard-stats .stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  position: relative;
+  overflow: hidden;
+}
+.dashboard-stats .stat-card .stat-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 12px;
+}
+.dashboard-stats .stat-card .stat-icon.blue { background: var(--fa-primary-light); color: var(--fa-primary); }
+.dashboard-stats .stat-card .stat-icon.green { background: #E8F5E9; color: var(--fa-success); }
+.dashboard-stats .stat-card .stat-icon.orange { background: #FFF3E0; color: var(--fa-warning); }
+.dashboard-stats .stat-card .stat-icon.red { background: #FFEBEE; color: var(--fa-danger); }
+.dashboard-stats .stat-card .stat-label { font-size: 13px; color: var(--fa-text-light); margin-bottom: 8px; }
+.dashboard-stats .stat-card .stat-value { font-size: 28px; font-weight: 700; line-height: 1.2; }
+.dashboard-stats .stat-card .stat-change {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; margin-top: 8px; padding: 2px 8px; border-radius: 4px;
+}
+.dashboard-stats .stat-card .stat-change.up { color: var(--fa-success); background: #E8F5E9; }
+
+/* chart-card 通用卡片（使用已有的） */
+.chart-card {
+  background: #fff; border-radius: 12px;
+  padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.chart-card-title {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* 看板列表项 */
+.dash-list-item {
+  display: flex; align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #F0F0F0;
+  gap: 12px;
+}
+.dash-list-item:last-child { border-bottom: none; }
+.dash-list-item .dash-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.dash-list-item .dash-info { flex: 1; min-width: 0; }
+.dash-list-item .dash-info .dash-title { font-size: 13px; font-weight: 600; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-list-item .dash-info .dash-desc { font-size: 11px; color: #999; margin-top: 2px; }
+.dash-list-item .dash-action {
+  font-size: 11px; color: var(--fa-primary);
+  white-space: nowrap; flex-shrink: 0;
+  text-decoration: none;
+}
+.dash-list-item .dash-action:hover { text-decoration: underline; }
+.dash-empty {
+  text-align: center; padding: 30px 20px; color: #CCC; font-size: 13px;
+}
+.dash-empty i { font-size: 28px; display: block; margin-bottom: 8px; }
+
+/* ============ 右侧抽屉弹框 ============ */
+.dash-drawer-overlay {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 5000;
+}
+.dash-drawer-overlay.show { display: block; }
+.dash-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: 480px;
+  background: #fff;
+  z-index: 5001;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.dash-drawer.show { transform: translateX(0); }
+.dash-drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #E8ECF0;
+  background: var(--fa-primary);
+  color: #fff;
+  flex-shrink: 0;
+}
+.dash-drawer-header h4 { margin: 0; font-size: 16px; font-weight: 600; }
+.dash-drawer-close {
+  background: none; border: none; color: #fff;
+  font-size: 22px; cursor: pointer; opacity: 0.8; line-height: 1;
+}
+.dash-drawer-close:hover { opacity: 1; }
+.dash-drawer-search {
+  padding: 12px 20px;
+  border-bottom: 1px solid #F0F0F0;
+  flex-shrink: 0;
+}
+.dash-drawer-search .form-control {
+  height: 34px; font-size: 13px; border-radius: 4px;
+}
+.dash-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 20px;
+}
+.dash-drawer-item {
+  display: flex; align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #F5F5F5;
+  gap: 12px;
+}
+.dash-drawer-item:last-child { border-bottom: none; }
+.dash-drawer-item .drawer-icon {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.dash-drawer-item .drawer-info { flex: 1; min-width: 0; }
+.dash-drawer-item .drawer-info .drawer-title { font-size: 13px; font-weight: 600; color: #333; }
+.dash-drawer-item .drawer-info .drawer-desc { font-size: 11px; color: #999; margin-top: 2px; }
+.dash-drawer-empty {
+  text-align: center; padding: 50px 20px; color: #CCC; font-size: 14px;
+}
+.dash-drawer-empty i { font-size: 36px; display: block; margin-bottom: 10px; }

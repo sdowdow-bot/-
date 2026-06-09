@@ -22,26 +22,14 @@
     <div class="info">管理员 <small>超级管理员</small></div>
   </div>
   <ul class="sidebar-menu" id="sidebarMenu">
-    <!-- 首页看板 -->
-    <li data-menu="dashboard"><a href="#" onclick="switchPage('dashboard')"><i class="fa-solid fa-gauge-high fa-fw"></i> 首页看板</a></li>
-
     <!-- 个人中心 -->
-    <li class="treeview" data-menu="personalCenter">
-      <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-user-gear fa-fw"></i> 个人中心 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
-      <ul class="treeview-menu">
-        <li data-menu="myAudit"><a href="#" onclick="switchPage('myAudit')"><i class="fa-solid fa-clipboard-list fa-fw"></i> 待我审批 <span class="badge-right" id="badgeMyAudit">4</span></a></li>
-        <li data-menu="collabTask"><a href="#" onclick="switchPage('collabTask')"><i class="fa-solid fa-people-arrows fa-fw"></i> 协作任务</a></li>
-        <li data-menu="notifyRemind"><a href="#" onclick="switchPage('notifyRemind')"><i class="fa-regular fa-bell fa-fw"></i> 通知提醒</a></li>
-        <li data-menu="myBorrow"><a href="#" onclick="switchPage('myBorrow')"><i class="fa-solid fa-book-open-reader fa-fw"></i> 我的借阅</a></li>
-        <li data-menu="myFavorite"><a href="#" onclick="switchPage('myFavorite')"><i class="fa-regular fa-star fa-fw"></i> 我的收藏</a></li>
-      </ul>
-    </li>
+    <li class="active" data-menu="dashboard"><a href="#" onclick="switchPage('dashboard')"><i class="fa-solid fa-user-gear fa-fw"></i> 个人中心</a></li>
 
     <!-- 合同档案 -->
-    <li class="treeview open" data-menu="contractArchive">
+    <li class="treeview" data-menu="contractArchive">
       <a href="#" onclick="toggleTreeview(this)"><i class="fa-solid fa-folder-open fa-fw"></i> 合同档案 <span class="pull-right"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span></a>
       <ul class="treeview-menu">
-        <li class="active" data-menu="contractLedger"><a href="#" onclick="switchPage('contract')"><i class="fa-solid fa-table-list fa-fw"></i> 合同台账</a></li>
+        <li data-menu="contractLedger"><a href="#" onclick="switchPage('contract')"><i class="fa-solid fa-table-list fa-fw"></i> 合同台账</a></li>
         <li data-menu="contractImport"><a href="#" onclick="switchPage('contractImport')"><i class="fa-solid fa-file-import fa-fw"></i> 合同导入</a></li>
         <li data-menu="contractBorrow"><a href="#" onclick="switchPage('contractBorrow')"><i class="fa-solid fa-book-open fa-fw"></i> 合同借阅</a></li>
       </ul>
@@ -150,7 +138,7 @@
     <ol class="breadcrumb-top">
       <li><a href="#">首页</a></li>
       <li><a href="#">合同管理</a></li>
-      <li class="active" id="breadcrumbCurrent">合同台账</li>
+      <li class="active" id="breadcrumbCurrent">个人中心</li>
     </ol>
     <div class="navbar-right">
       <span><i class="fa-regular fa-user"></i> 管理员</span>
@@ -160,8 +148,121 @@
 
   <!-- 内容区 -->
     <div class="content-area" id="contentArea">
-    <!-- ============ 合同列表页（默认） ============ -->
-    <div id="pageContractList">
+    <!-- ============ 首页看板（个人中心） ============ -->
+    <div id="pageDashboard">
+      <!-- 顶部统计卡片 -->
+      <div class="dashboard-stats">
+        <div class="stat-card" onclick="openDashDrawer('approving')" style="cursor:pointer;">
+          <div class="stat-icon orange"><i class="fa-solid fa-spinner"></i></div>
+          <div class="stat-label">审批中</div>
+          <div class="stat-value" id="dashApproving">0</div>
+          <div class="stat-change" style="color:var(--fa-warning);background:#FFF3E0;"><i class="fa-solid fa-clock"></i> 待处理</div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('myAudit')" style="cursor:pointer;">
+          <div class="stat-icon green"><i class="fa-solid fa-clipboard-list"></i></div>
+          <div class="stat-label">待我审批</div>
+          <div class="stat-value" id="dashMyAudit">0</div>
+          <div class="stat-change up"><i class="fa-solid fa-arrow-right"></i> <a href="#" onclick="switchPage('myAudit');return false;" style="color:var(--fa-success);">去处理</a></div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('draft')" style="cursor:pointer;">
+          <div class="stat-icon red"><i class="fa-solid fa-pen"></i></div>
+          <div class="stat-label">我的草稿</div>
+          <div class="stat-value" id="dashDrafts">0</div>
+          <div class="stat-change" style="color:var(--fa-info);background:var(--primary-light);"><i class="fa-solid fa-arrow-right"></i> <a href="#" onclick="switchPage('contractDraft');return false;" style="color:var(--fa-primary);">去起草</a></div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('collabTask')" style="cursor:pointer;">
+          <div class="stat-icon" style="background:#E3F2FD;color:#1565C0;"><i class="fa-solid fa-people-arrows"></i></div>
+          <div class="stat-label">协作任务</div>
+          <div class="stat-value" id="dashCollabTask">0</div>
+          <div class="stat-change" style="color:#1565C0;background:#E3F2FD;"><i class="fa-solid fa-list"></i> 列表</div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('borrow')" style="cursor:pointer;">
+          <div class="stat-icon" style="background:#E8F5E9;color:#2E7D32;"><i class="fa-solid fa-book-open-reader"></i></div>
+          <div class="stat-label">我的借阅</div>
+          <div class="stat-value" id="dashMyBorrow">0</div>
+          <div class="stat-change" style="color:#2E7D32;background:#E8F5E9;"><i class="fa-solid fa-list"></i> 列表</div>
+        </div>
+        <div class="stat-card" onclick="openDashDrawer('favorite')" style="cursor:pointer;">
+          <div class="stat-icon" style="background:#FFF8E1;color:#F57F17;"><i class="fa-regular fa-star"></i></div>
+          <div class="stat-label">我的收藏</div>
+          <div class="stat-value" id="dashMyFavorite">0</div>
+          <div class="stat-change" style="color:#F57F17;background:#FFF8E1;"><i class="fa-solid fa-list"></i> 列表</div>
+        </div>
+      </div>
+
+      <!-- 左右双列布局 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+        <!-- 左列 -->
+        <div>
+          <!-- 待办事项 -->
+          <div class="chart-card" style="margin-bottom:16px;">
+            <div class="chart-card-title">
+              <span><i class="fa-solid fa-clipboard-list" style="color:var(--fa-warning);"></i> 待我审批</span>
+              <a href="#" onclick="switchPage('myAudit');return false;" style="font-size:12px;color:var(--fa-primary);">查看全部 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div id="dashTodoList" style="min-height:100px;">
+              <!-- JS动态渲染 -->
+            </div>
+          </div>
+
+          <!-- 我的草稿 -->
+          <div class="chart-card">
+            <div class="chart-card-title">
+              <span><i class="fa-solid fa-pen" style="color:var(--fa-primary);"></i> 我的草稿</span>
+              <a href="#" onclick="switchPage('contractDraft');return false;" style="font-size:12px;color:var(--fa-primary);">查看全部 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div id="dashDraftList" style="min-height:100px;">
+              <!-- JS动态渲染 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 右列 -->
+        <div>
+          <!-- 消息提醒 -->
+          <div class="chart-card" style="margin-bottom:16px;">
+            <div class="chart-card-title">
+              <span><i class="fa-solid fa-bell" style="color:var(--fa-danger);"></i> 消息提醒 <span id="dashMsgBadge" style="display:inline-block;background:var(--fa-danger);color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;vertical-align:middle;margin-left:4px;"></span></span>
+              <a href="#" onclick="switchPage('notifyRemind');return false;" style="font-size:12px;color:var(--fa-primary);">查看全部 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div id="dashNotifyList" style="min-height:100px;">
+              <!-- JS动态渲染 -->
+            </div>
+          </div>
+
+          <!-- 协作任务 -->
+          <div class="chart-card" style="margin-bottom:16px;">
+            <div class="chart-card-title">
+              <span><i class="fa-solid fa-people-arrows" style="color:#1565C0;"></i> 协作任务</span>
+            </div>
+            <div id="dashCollabTaskList" style="min-height:100px;">
+              <!-- JS动态渲染 -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============ 右侧抽屉弹框 ============ -->
+    <div class="dash-drawer-overlay" id="dashDrawerOverlay" onclick="closeDashDrawer()"></div>
+    <div class="dash-drawer" id="dashDrawer">
+      <div class="dash-drawer-header">
+        <h4 id="dashDrawerTitle"><i class="fa-solid fa-list"></i> 记录列表</h4>
+        <button class="dash-drawer-close" onclick="closeDashDrawer()">&times;</button>
+      </div>
+      <div class="dash-drawer-search">
+        <input type="text" class="form-control" id="dashDrawerSearch" placeholder="搜索..." oninput="renderDashDrawerList()">
+      </div>
+      <div class="dash-drawer-body" id="dashDrawerBody">
+        <!-- JS动态渲染 -->
+      </div>
+    </div>
+
+    <!-- ============ 合同列表页 ============ -->
+    <div id="pageContractList" style="display:none;">
       <div class="page-header">
         <h1>合同管理 <small>共 <span id="totalCount">28</span> 条记录</small></h1>
         <div>
@@ -478,13 +579,13 @@
       <!-- 搜索工具栏 -->
       <div class="search-toolbar">
         <div class="row">
-          <div class="col-md-3 col-sm-6">
+          <div class="col-md-2 col-sm-6">
             <div class="form-group">
               <label>合同名称</label>
               <input type="text" class="form-control" id="draftSearchName" placeholder="输入合同名称">
             </div>
           </div>
-          <div class="col-md-3 col-sm-6">
+          <div class="col-md-2 col-sm-6">
             <div class="form-group">
               <label>合同编号</label>
               <input type="text" class="form-control" id="draftSearchNo" placeholder="输入合同编号">
@@ -505,6 +606,23 @@
           </div>
           <div class="col-md-2 col-sm-6">
             <div class="form-group">
+              <label>合同状态</label>
+              <select class="form-control" id="draftSearchStatus">
+                <option value="">全部</option>
+                <option value="draft">草稿</option>
+                <option value="approving">审核中</option>
+                <option value="approved">已通过</option>
+                <option value="rejected">已驳回</option>
+                <option value="withdrawn">已撤销</option>
+                <option value="pendingSign">待签署</option>
+                <option value="signing">签署中</option>
+                <option value="sealed">已签署</option>
+                <option value="rejectedSign">已拒签</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6">
+            <div class="form-group">
               <label>&nbsp;</label>
               <div class="btn-search-group">
                 <button class="btn btn-primary btn-sm" onclick="applyDraftFilter()"><i class="fa-solid fa-magnifying-glass"></i> 搜索</button>
@@ -518,12 +636,8 @@
       <!-- 起草记录表格 -->
       <div class="fa-table-wrap">
         <div class="table-toolbar">
-          <div class="btn-group">
-            <button class="btn btn-default btn-sm" onclick="batchSubmitDraft()"><i class="fa-solid fa-paper-plane"></i> 批量提交审批</button>
-            <button class="btn btn-default btn-sm" onclick="batchDeleteDraft()"><i class="fa-solid fa-trash"></i> 批量删除</button>
-          </div>
           <div class="right-tools">
-            <span class="text-muted" style="font-size:12px;"><i class="fa-solid fa-circle-info"></i> 仅显示草稿状态的合同，提交审批后将移出此列表</span>
+            <span class="text-muted" style="font-size:12px;"><i class="fa-solid fa-circle-info"></i> 显示全部合同，可按状态筛选</span>
           </div>
         </div>
         <div class="table-scroll-wrap">
@@ -3143,6 +3257,7 @@
 
 <script>
 // 初始化
+switchPage('dashboard');
 updateNotifyBadge();
 updateTabBadges();
 </script>

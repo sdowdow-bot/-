@@ -23,7 +23,7 @@ function activateMenu(menuKey) {
 function switchPage(page) {
   try { if (event && event.preventDefault) event.preventDefault(); } catch(e) {}
   // 隐藏所有页面
-  $('#pageContractList, #pageContractDetail, #pageContractApproval, #pageMyAudit, #pageAuditConfig, #pageContractEntity, #pageExcelImport, #pageFileImport, #pageCollabEdit, #pageInvoice, #pageNoRule, #pageOperationLog, #pageNotifyCenter, #pageContractDraft, #pageContractTemplate, #pageTemplateEditor').hide();
+  $('#pageDashboard, #pageContractList, #pageContractDetail, #pageContractApproval, #pageMyAudit, #pageAuditConfig, #pageContractEntity, #pageExcelImport, #pageFileImport, #pageCollabEdit, #pageInvoice, #pageNoRule, #pageOperationLog, #pageNotifyCenter, #pageContractDraft, #pageContractTemplate, #pageTemplateEditor').hide();
   // 重置侧边栏激活状态
   $('#sidebarMenu li').removeClass('active');
   var bc = $('#breadcrumbCurrent');
@@ -71,8 +71,8 @@ function switchPage(page) {
   // ========== 有专属页面的：显示对应页面 ==========
   if (page === 'dashboard') {
     previousPage = 'dashboard';
-    $('#pageContractList').show();
-    renderContractTable(contracts); updateTotalCount();
+    $('#pageDashboard').show();
+    renderDashboard();
   } else if (page === 'myAudit') {
     previousPage = 'myAudit';
     $('#pageMyAudit').show();
@@ -268,4 +268,194 @@ function refreshList() {
 
 function exportData() {
   alert('正在导出合同数据...');
+}
+
+// ==================== 首页看板渲染 ====================
+function renderDashboard() {
+  // 1. 统计卡片
+  var approvingCount = contracts.filter(function(c){ return c.status === 'approving'; }).length;
+  var myAuditCount = (typeof myAuditList !== 'undefined') ? myAuditList.length : 0;
+  var draftCount = contracts.filter(function(c){ return c.status === 'draft'; }).length;
+  var collabTaskCount = 5;
+  var myBorrowCount = 3;
+  var myFavoriteCount = 7;
+
+  $('#dashApproving').text(approvingCount);
+  $('#dashMyAudit').text(myAuditCount);
+  $('#dashDrafts').text(draftCount);
+  $('#dashCollabTask').text(collabTaskCount);
+  $('#dashMyBorrow').text(myBorrowCount);
+  $('#dashMyFavorite').text(myFavoriteCount);
+
+  // 2. 待办事项（待我审批列表）
+  if (typeof myAuditList !== 'undefined' && myAuditList.length > 0) {
+    var todoHtml = '';
+    myAuditList.slice(0, 5).forEach(function(item) {
+      var urgencyIcon = item.urgency === '紧急' ? '<i class="fa-solid fa-circle-exclamation" style="color:var(--fa-danger);"></i>' : (item.urgency === '超时' ? '<i class="fa-solid fa-clock" style="color:var(--fa-danger);"></i>' : '<i class="fa-regular fa-clock" style="color:var(--fa-warning);"></i>');
+      todoHtml += '<div class="dash-list-item">';
+      todoHtml += '<div class="dash-icon" style="background:#FFF3E0;color:#E65100;"><i class="fa-solid fa-file-contract"></i></div>';
+      todoHtml += '<div class="dash-info"><div class="dash-title">'+item.name+'</div><div class="dash-desc">'+item.currentNode+' · '+item.submitTime+'</div></div>';
+      todoHtml += '<a href="#" onclick="switchPage(\'myAudit\');return false;" class="dash-action">处理</a>';
+      todoHtml += '</div>';
+    });
+    $('#dashTodoList').html(todoHtml);
+  } else {
+    $('#dashTodoList').html('<div class="dash-empty"><i class="fa-solid fa-check-circle" style="color:var(--fa-success);"></i>暂无待办事项</div>');
+  }
+
+  // 3. 我的草稿
+  var myDrafts = contracts.filter(function(c){ return c.status === 'draft'; });
+  if (myDrafts.length > 0) {
+    var draftHtml = '';
+    myDrafts.slice(0, 5).forEach(function(c) {
+      draftHtml += '<div class="dash-list-item">';
+      draftHtml += '<div class="dash-icon" style="background:var(--fa-primary-light);color:var(--fa-primary);"><i class="fa-solid fa-pen"></i></div>';
+      draftHtml += '<div class="dash-info"><div class="dash-title">'+c.name+'</div><div class="dash-desc">¥ '+c.amount.toLocaleString('zh-CN')+' · '+c.createTime+'</div></div>';
+      draftHtml += '<a href="#" onclick="editContract('+c.id+');return false;" class="dash-action">编辑</a>';
+      draftHtml += '</div>';
+    });
+    $('#dashDraftList').html(draftHtml);
+  } else {
+    $('#dashDraftList').html('<div class="dash-empty"><i class="fa-solid fa-inbox"></i>暂无草稿合同</div>');
+  }
+
+  // 4. 消息提醒（未读消息）
+  if (typeof notifyMessages !== 'undefined') {
+    var unreadMessages = notifyMessages.filter(function(m){ return !m.read; });
+    if (unreadMessages.length > 0) {
+      $('#dashMsgBadge').text(unreadMessages.length).show();
+    } else {
+      $('#dashMsgBadge').text('').hide();
+    }
+    if (unreadMessages.length > 0) {
+      var notifyHtml = '';
+      unreadMessages.slice(0, 5).forEach(function(m) {
+        var cfg = (typeof MSG_TYPE_CONFIG !== 'undefined') ? (MSG_TYPE_CONFIG[m.type] || MSG_TYPE_CONFIG.system) : { label: m.type, icon: 'fa-solid fa-bell', color: '#1565C0' };
+        notifyHtml += '<div class="dash-list-item">';
+        notifyHtml += '<div class="dash-icon" style="background:'+cfg.bg+';color:'+cfg.color+';"><i class="'+cfg.icon+'"></i></div>';
+        notifyHtml += '<div class="dash-info"><div class="dash-title">'+m.title+'</div><div class="dash-desc">'+m.desc+'</div></div>';
+        notifyHtml += '<a href="#" onclick="switchPage(\'notifyRemind\');return false;" class="dash-action">查看</a>';
+        notifyHtml += '</div>';
+      });
+      $('#dashNotifyList').html(notifyHtml);
+    } else {
+      $('#dashNotifyList').html('<div class="dash-empty"><i class="fa-regular fa-bell-slash"></i>暂无新消息</div>');
+    }
+  } else {
+    $('#dashNotifyList').html('<div class="dash-empty"><i class="fa-regular fa-bell-slash"></i>暂无新消息</div>');
+  }
+
+  // 5. 协作任务
+  var collabTasks = [
+    { name: '医疗器械采购合同审核', desc: '法务审核 · 待处理' },
+    { name: '护理服务合作协议会签', desc: '联合会审 · 进行中' },
+    { name: '药品供应合同续签', desc: '部门评审 · 待回复' }
+  ];
+  var taskHtml = '';
+  collabTasks.forEach(function(t) {
+    taskHtml += '<div class="dash-list-item">';
+    taskHtml += '<div class="dash-icon" style="background:#E3F2FD;color:#1565C0;"><i class="fa-solid fa-people-arrows"></i></div>';
+    taskHtml += '<div class="dash-info"><div class="dash-title">'+t.name+'</div><div class="dash-desc">'+t.desc+'</div></div>';
+    taskHtml += '</div>';
+  });
+  $('#dashCollabTaskList').html(taskHtml);
+
+}
+
+// ==================== 右侧抽屉弹框 ====================
+var currentDrawerType = '';
+
+function openDashDrawer(type) {
+  currentDrawerType = type;
+  var titles = {
+    approving: '审批中合同',
+    myAudit: '待我审批',
+    draft: '我的草稿',
+    collabTask: '协作任务',
+    borrow: '我的借阅',
+    favorite: '我的收藏'
+  };
+  var icons = {
+    approving: 'fa-solid fa-spinner',
+    myAudit: 'fa-solid fa-clipboard-list',
+    draft: 'fa-solid fa-pen',
+    collabTask: 'fa-solid fa-people-arrows',
+    borrow: 'fa-solid fa-book-open-reader',
+    favorite: 'fa-regular fa-star'
+  };
+  $('#dashDrawerTitle').html('<i class="'+icons[type]+'"></i> '+titles[type]);
+  $('#dashDrawerSearch').val('');
+  $('#dashDrawer').addClass('show');
+  $('#dashDrawerOverlay').addClass('show');
+  renderDashDrawerList();
+}
+
+function closeDashDrawer() {
+  $('#dashDrawer').removeClass('show');
+  $('#dashDrawerOverlay').removeClass('show');
+}
+
+function renderDashDrawerList() {
+  var keyword = ($('#dashDrawerSearch').val() || '').toLowerCase();
+  var listData = [];
+  var emptyText = '';
+  
+  if (currentDrawerType === 'approving') {
+    listData = contracts.filter(function(c){ return c.status === 'approving'; });
+  } else if (currentDrawerType === 'myAudit') {
+    listData = typeof myAuditList !== 'undefined' ? myAuditList : [];
+  } else if (currentDrawerType === 'draft') {
+    listData = contracts.filter(function(c){ return c.status === 'draft'; });
+  } else if (currentDrawerType === 'collabTask') {
+    listData = [
+      { name: '医疗器械采购合同审核', desc: '法务审核 · 待处理' },
+      { name: '护理服务合作协议会签', desc: '联合会审 · 进行中' },
+      { name: '药品供应合同续签', desc: '部门评审 · 待回复' },
+      { name: '办公区域租赁合同会签', desc: '联合会审 · 待处理' },
+      { name: '物流配送服务合同初审', desc: '部门评审 · 已完成' }
+    ];
+  } else if (currentDrawerType === 'borrow') {
+    listData = [
+      { id: 1, name: '医疗器械采购合同', desc: '借阅至 2026-06-15' },
+      { id: 7, name: '物流配送服务合同', desc: '借阅至 2026-07-01' }
+    ];
+  } else if (currentDrawerType === 'favorite') {
+    listData = [
+      { name: '采购合同标准模板', desc: '合同模板 - 可快速创建采购合同' },
+      { name: '服务合同通用条款', desc: '通用条款 - 适用于服务类合同' }
+    ];
+  }
+
+  // 搜索过滤
+  if (keyword) {
+    listData = listData.filter(function(item){
+      return (item.name || '').toLowerCase().indexOf(keyword) >= 0 ||
+             (item.desc || '').toLowerCase().indexOf(keyword) >= 0;
+    });
+  }
+
+  var html = '';
+  if (listData.length === 0) {
+    html = '<div class="dash-drawer-empty"><i class="fa-solid fa-inbox"></i>暂无记录</div>';
+  } else {
+    listData.forEach(function(item){
+      var onClick = '';
+      if (currentDrawerType === 'approving' && item.id) {
+        onClick = ' onclick="closeDashDrawer();openContractDetail('+item.id+');return false;"';
+      } else if (currentDrawerType === 'myAudit' && item.id) {
+        onClick = ' onclick="closeDashDrawer();switchPage(\'myAudit\');return false;"';
+      } else if (currentDrawerType === 'draft' && item.id) {
+        onClick = ' onclick="closeDashDrawer();editContract('+item.id+');return false;"';
+      } else if (currentDrawerType === 'borrow' && item.id) {
+        onClick = ' onclick="closeDashDrawer();switchPage(\'contract\');setTimeout(function(){openContractDetail('+item.id+')},300);return false;"';
+      } else if (currentDrawerType === 'favorite') {
+        onClick = '';
+      }
+      html += '<div class="dash-drawer-item" style="cursor:pointer;"'+onClick+'>';
+      html += '<div class="drawer-info"><div class="drawer-title">'+(item.name||item.contractName||'')+'</div>';
+      html += '<div class="drawer-desc">'+(item.desc||item.currentNode||item.contractNo||'')+'</div></div>';
+      html += '</div>';
+    });
+  }
+  $('#dashDrawerBody').html(html);
 }
