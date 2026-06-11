@@ -24,7 +24,8 @@ const STATUS_LABEL = {
   signing: '签署中',
   sealed: '已签署',
   fulfilling: '履约中',
-  rejectedSign: '已拒签',
+  rejectedSign: '已取消',
+  terminated: '已终止',
   archived: '已归档'
 };
 
@@ -40,6 +41,7 @@ const STATUS_CLASS = {
   sealed: 'status-sealed',
   fulfilling: 'status-fulfilling',
   rejectedSign: 'status-rejectedSign',
+  terminated: 'status-terminated',
   archived: 'status-archived'
 };
 

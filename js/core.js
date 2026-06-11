@@ -146,7 +146,7 @@ function filterByStatus(status) {
 }
 
 // 合同台账生命周期状态（仅含审核通过后流转到台账的合同状态）
-const LEDGER_LIFECYCLE_STATUSES = ['importPending','pendingSign','signing','sealed','fulfilling','rejectedSign','archived'];
+const LEDGER_LIFECYCLE_STATUSES = ['importPending','pendingSign','signing','sealed','fulfilling','rejectedSign','terminated','archived'];
 
 function getLedgerContracts() {
   return contracts.filter(function(c){ return LEDGER_LIFECYCLE_STATUSES.indexOf(c.status) >= 0; });
