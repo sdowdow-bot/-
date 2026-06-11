@@ -6,10 +6,10 @@ const STATUS = {
   APPROVING: 'approving',
   APPROVED: 'approved',
   REJECTED: 'rejected',
-  SEALING: 'signing',
+  SIGNING: 'signing',
   SEALED: 'sealed',
-  ARCHIVING: 'sealed',
-  ARCHIVED: 'sealed',
+  ARCHIVING: 'archiving',
+  ARCHIVED: 'archived',
   WITHDRAWN: 'withdrawn'
 };
 
@@ -19,10 +19,13 @@ const STATUS_LABEL = {
   approved: '已通过',
   rejected: '已驳回',
   withdrawn: '已撤销',
+  importPending: '导入待补全',
   pendingSign: '待签署',
   signing: '签署中',
   sealed: '已签署',
-  rejectedSign: '已拒签'
+  fulfilling: '履约中',
+  rejectedSign: '已拒签',
+  archived: '已归档'
 };
 
 const STATUS_CLASS = {
@@ -31,10 +34,13 @@ const STATUS_CLASS = {
   approved: 'status-approved',
   rejected: 'status-rejected',
   withdrawn: 'status-withdrawn',
+  importPending: 'status-importPending',
   pendingSign: 'status-pendingSign',
   signing: 'status-signing',
   sealed: 'status-sealed',
-  rejectedSign: 'status-rejectedSign'
+  fulfilling: 'status-fulfilling',
+  rejectedSign: 'status-rejectedSign',
+  archived: 'status-archived'
 };
 
 const AUDIT_STATUS_LABEL = {

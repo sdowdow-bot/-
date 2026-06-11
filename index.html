@@ -310,15 +310,13 @@
               <label>当前状态</label>
               <select class="form-control" id="searchStatus" onchange="applyFilter()">
                 <option value="">全部</option>
-                <option value="draft">草稿</option>
-                <option value="approving">审批中</option>
-                <option value="approved">已通过</option>
-                <option value="rejected">已驳回</option>
-                <option value="sealing">用印签署中</option>
+                <option value="importPending">导入待补全</option>
+                <option value="pendingSign">待签署</option>
+                <option value="signing">签署中</option>
                 <option value="sealed">已签署</option>
-                <option value="archiving">归档中</option>
+                <option value="fulfilling">履约中</option>
+                <option value="rejectedSign">已拒签</option>
                 <option value="archived">已归档</option>
-                <option value="withdrawn">已撤回</option>
               </select>
             </div>
           </div>
@@ -614,10 +612,6 @@
                 <option value="approved">已通过</option>
                 <option value="rejected">已驳回</option>
                 <option value="withdrawn">已撤销</option>
-                <option value="pendingSign">待签署</option>
-                <option value="signing">签署中</option>
-                <option value="sealed">已签署</option>
-                <option value="rejectedSign">已拒签</option>
               </select>
             </div>
           </div>
@@ -1269,7 +1263,7 @@
       <!-- 上排：返回 + 名称 + 操作按钮 -->
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px;">
         <div style="display:flex;align-items:center;gap:14px;">
-          <button onclick="cancelCollabEdit()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid #E0E0E0;border-radius:6px;background:#fff;color:#555;font-size:13px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#F5F7FA';this.style.borderColor:#CCC;" onmouseout="this.style.background='#fff';this.style.borderColor='#E0E0E0';"><i class="fa-solid fa-arrow-left" style="font-size:12px;"></i> 返回</button>
+          <button onclick="cancelCollabEdit()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid #E0E0E0;border-radius:6px;background:#fff;color:#555;font-size:13px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#F5F7FA';this.style.borderColor='#CCC';" onmouseout="this.style.background='#fff';this.style.borderColor='#E0E0E0';"><i class="fa-solid fa-arrow-left" style="font-size:12px;"></i> 返回</button>
           <div style="display:flex;align-items:baseline;gap:10px;">
             <span style="font-size:17px;font-weight:700;color:#1A1A1A;" id="collabEditTitle"><i class="fa-solid fa-file-contract" style="color:var(--fa-primary);margin-right:4px;"></i>合同编辑</span>
             <span style="font-size:12px;color:#AAA;font-weight:400;">|</span>

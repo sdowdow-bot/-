@@ -63,8 +63,9 @@ function updateTotalCount() {
   // exclude empty placeholder
   let tbody = $('#contractTableBody');
   if (tbody.find('td[colspan]').length > 0) visible = 0;
-  $('#totalCount').text(contracts.length);
-  $('#pageTotalCount').text(visible > 0 ? visible : contracts.length);
+  let total = (typeof getLedgerContracts !== 'undefined') ? getLedgerContracts().length : contracts.length;
+  $('#totalCount').text(total);
+  $('#pageTotalCount').text(visible > 0 ? visible : total);
 }
 
 // ==================== 筛选 ====================
@@ -83,7 +84,7 @@ function quickApprove(id) {
     opinion: '同意，快速通过。'
   });
   c.status = 'approved';
-  c.currentNode = '待推送用印签署';
+  c.currentNode = '已通过';
   c.progress = 100;
   renderContractTable(contracts);
   updateTotalCount();

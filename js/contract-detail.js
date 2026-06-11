@@ -1,19 +1,26 @@
 ﻿// ==================== 打开合同详情 ====================
-function openContractDetail(id, auditMode) {
+function openContractDetail(id, auditMode, draftView) {
   let c = contracts.find(function(item){ return item.id === id; });
   if (!c) return;
   currentContractId = id;
 
-  // 待我审批模式：只显示基本信息、合同内容、审核记录
-  if (auditMode) {
+  // 审核模式或起草查看模式：只显示基本信息、合同内容、审核记录
+  if (auditMode || draftView) {
     $('#detailTabs li:has(a[href="#tabSubject"])').hide();
     $('#detailTabs li:has(a[href="#tabPerformance"])').hide();
     $('#detailTabs li:has(a[href="#tabChangeRecord"])').hide();
     $('#detailTabs li:has(a[href="#tabInvoice"])').hide();
-    // 审核模式：隐藏编辑按钮，显示底部审核操作栏
-    $('#btnDetailEdit').hide();
-    $('#auditBottomBar').css('display','flex');
-    $('#pageContractDetail').css('padding-bottom','70px');
+    if (auditMode) {
+      // 审核模式：隐藏编辑按钮，显示底部审核操作栏
+      $('#btnDetailEdit').hide();
+      $('#auditBottomBar').css('display','flex');
+      $('#pageContractDetail').css('padding-bottom','70px');
+    } else {
+      // 起草查看模式：不显示编辑按钮，也不显示审核操作栏
+      $('#btnDetailEdit').hide();
+      $('#auditBottomBar').hide();
+      $('#pageContractDetail').css('padding-bottom','0');
+    }
   } else {
     $('#detailTabs li:has(a[href="#tabSubject"])').show();
     $('#detailTabs li:has(a[href="#tabPerformance"])').show();
@@ -32,6 +39,8 @@ function openContractDetail(id, auditMode) {
   $('#pageExcelImport').hide();
   $('#pageFileImport').hide();
   $('#pageInvoice').hide();
+  $('#pageContractDraft').hide();
+  $('#pageContractTemplate').hide();
   $('#pageContractDetail').show();
   $('#breadcrumbCurrent').text('合同详情');
 
@@ -421,6 +430,8 @@ function backToList() {
     switchPage('contractApproval');
   } else if (previousPage === 'myAudit') {
     switchPage('myAudit');
+  } else if (previousPage === 'contractDraft') {
+    switchPage('contractDraft');
   } else {
     switchPage('contract');
   }

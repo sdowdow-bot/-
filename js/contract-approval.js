@@ -91,7 +91,7 @@ function batchApprovalPass() {
     if (c) {
       c.status = 'approved';
       c.auditStatus = 'approved';
-      c.currentNode = '待推送用印签署';
+      c.currentNode = '已通过';
       c.progress = 100;
     }
   });
@@ -204,7 +204,7 @@ function auditPass(contractId) {
   let c = contracts.find(function(c){ return c.id === contractId; });
   if (c) {
     c.status = 'approved';
-    c.currentNode = '待推送用印签署';
+    c.currentNode = '已通过';
     c.progress = 100;
     if (!approvalHistories[contractId]) approvalHistories[contractId] = [];
     approvalHistories[contractId].push({

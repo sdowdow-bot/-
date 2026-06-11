@@ -22,9 +22,9 @@ function renderDraftTable(list) {
   } else {
     list.forEach(function(c){
       html += '<tr>';
-      html += '<td><input type="checkbox" class="draft-check-item" value="'+c.id+'"></td>';
+      html += '<td><input type="checkbox" class="draft-check-item" value="'+c.id+'" '+(c.status==='approved'||c.status==='approving'?'disabled':'')+'></td>';
       html += '<td>'+c.id+'</td>';
-      html += '<td><a href="#" onclick="editDraftContract('+c.id+');return false;" style="color:var(--fa-primary);font-weight:500;">'+c.name+'</a></td>';
+      html += '<td><a href="#" onclick="'+(c.status==='draft'?'editDraftContract('+c.id+')':'openContractDetail('+c.id+')')+';return false;" style="color:var(--fa-primary);font-weight:500;">'+c.name+'</a></td>';
       html += '<td>'+c.no+'</td>';
       html += '<td>'+(c.subject||'—')+'</td>';
       html += '<td>'+(c.category||c.type||'—')+'</td>';
@@ -35,10 +35,27 @@ function renderDraftTable(list) {
       html += '<td>'+c.createTime+'</td>';
       html += '<td>'+(c.updateTime||'—')+'</td>';
       html += '<td style="white-space:nowrap;">';
-      html += '<a href="#" onclick="openDraftOnlineEdit('+c.id+');return false;" style="color:var(--fa-primary);margin-right:8px;" title="在线编辑"><i class="fa-solid fa-pen-nib"></i> 在线编辑</a>';
-      html += '<a href="#" onclick="editDraftContract('+c.id+');return false;" style="color:var(--fa-info);margin-right:8px;" title="编辑信息"><i class="fa-solid fa-pen-to-square"></i> 编辑</a>';
-      html += '<a href="#" onclick="submitDraftToApproval('+c.id+');return false;" style="color:var(--fa-success);margin-right:8px;" title="提交审批"><i class="fa-solid fa-paper-plane"></i> 提交审批</a>';
-      html += '<a href="#" onclick="deleteContract('+c.id+');return false;" style="color:var(--fa-danger);" title="删除"><i class="fa-solid fa-trash"></i> 删除</a>';
+      if (c.status === 'draft') {
+        html += '<a href="#" onclick="editDraftContract('+c.id+');return false;" style="color:var(--fa-info);margin-right:8px;" title="编辑"><i class="fa-solid fa-pen-to-square"></i> 编辑</a>';
+        html += '<a href="#" onclick="deleteContract('+c.id+');return false;" style="color:var(--fa-danger);" title="删除"><i class="fa-solid fa-trash"></i> 删除</a>';
+      } else if (c.status === 'approving') {
+        html += '<a href="#" onclick="withdrawContract('+c.id+');return false;" style="color:#777;margin-right:8px;" title="撤销"><i class="fa-solid fa-rotate-left"></i> 撤销</a>';
+        html += '<a href="#" onclick="openContractDetail('+c.id+',false,true);return false;" style="color:var(--fa-primary);margin-right:8px;" title="查看"><i class="fa-solid fa-eye"></i> 查看</a>';
+        html += '<a href="#" onclick="viewAuditRecord('+c.id+');return false;" style="color:var(--fa-info);" title="审核记录"><i class="fa-solid fa-clock-rotate-left"></i> 审核记录</a>';
+      } else if (c.status === 'approved') {
+        html += '<a href="#" onclick="openContractDetail('+c.id+',false,true);return false;" style="color:var(--fa-primary);margin-right:8px;" title="查看"><i class="fa-solid fa-eye"></i> 查看</a>';
+        html += '<a href="#" onclick="viewAuditRecord('+c.id+');return false;" style="color:var(--fa-info);" title="审核记录"><i class="fa-solid fa-clock-rotate-left"></i> 审核记录</a>';
+      } else if (c.status === 'rejected') {
+        html += '<a href="#" onclick="deleteContract('+c.id+');return false;" style="color:var(--fa-danger);margin-right:8px;" title="删除"><i class="fa-solid fa-trash"></i> 删除</a>';
+        html += '<a href="#" onclick="openContractDetail('+c.id+',false,true);return false;" style="color:var(--fa-primary);margin-right:8px;" title="查看"><i class="fa-solid fa-eye"></i> 查看</a>';
+        html += '<a href="#" onclick="editDraftContract('+c.id+');return false;" style="color:var(--fa-warning);margin-right:8px;" title="编辑"><i class="fa-solid fa-pen"></i> 编辑</a>';
+        html += '<a href="#" onclick="viewAuditRecord('+c.id+');return false;" style="color:var(--fa-info);" title="审核记录"><i class="fa-solid fa-clock-rotate-left"></i> 审核记录</a>';
+      } else if (c.status === 'withdrawn') {
+        html += '<a href="#" onclick="editDraftContract('+c.id+');return false;" style="color:var(--fa-info);margin-right:8px;" title="编辑"><i class="fa-solid fa-pen-to-square"></i> 编辑</a>';
+        html += '<a href="#" onclick="deleteContract('+c.id+');return false;" style="color:var(--fa-danger);" title="删除"><i class="fa-solid fa-trash"></i> 删除</a>';
+      } else {
+        html += '<a href="#" onclick="openContractDetail('+c.id+');return false;" style="color:var(--fa-primary);margin-right:8px;" title="查看详情"><i class="fa-solid fa-eye"></i> 查看</a>';
+      }
       html += '</td>';
       html += '</tr>';
     });

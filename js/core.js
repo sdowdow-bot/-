@@ -84,7 +84,7 @@ function switchPage(page) {
   } else if (page === 'contract') {
     previousPage = 'contract';
     $('#pageContractList').show();
-    renderContractTable(contracts); updateTotalCount();
+    renderContractTable(getLedgerContracts()); updateTotalCount();
   } else if (page === 'contractApproval') {
     previousPage = 'contractApproval';
     $('#pageContractApproval').show();
@@ -117,7 +117,7 @@ function switchPage(page) {
     renderInvoiceList();
   } else if (page === 'approval') {
     $('#pageContractList').show();
-    var pending = contracts.filter(function(c){ return c.status === 'approving' || c.status === 'sealing' || c.status === 'archiving'; });
+    var pending = getLedgerContracts().filter(function(c){ return c.status === 'signing' || c.status === 'archiving'; });
     renderContractTable(pending); updateTotalCount();
   } else if (page === 'notifyRemind') {
     $('#pageNotifyCenter').show();
@@ -143,6 +143,13 @@ function filterByStatus(status) {
   $('#pageContractDetail').hide();
   $('#searchStatus').val(status);
   applyFilter();
+}
+
+// 合同台账生命周期状态（仅含审核通过后流转到台账的合同状态）
+const LEDGER_LIFECYCLE_STATUSES = ['importPending','pendingSign','signing','sealed','fulfilling','rejectedSign','archived'];
+
+function getLedgerContracts() {
+  return contracts.filter(function(c){ return LEDGER_LIFECYCLE_STATUSES.indexOf(c.status) >= 0; });
 }
 
 // ==================== 合同列表渲染 ====================
@@ -210,8 +217,9 @@ function updateTotalCount() {
   // exclude empty placeholder
   let tbody = $('#contractTableBody');
   if (tbody.find('td[colspan]').length > 0) visible = 0;
-  $('#totalCount').text(contracts.length);
-  $('#pageTotalCount').text(visible > 0 ? visible : contracts.length);
+  let total = getLedgerContracts().length;
+  $('#totalCount').text(total);
+  $('#pageTotalCount').text(visible > 0 ? visible : total);
 }
 
 // ==================== 筛选 ====================
@@ -221,7 +229,7 @@ function applyFilter() {
   let name = $('#searchName').val().toLowerCase();
   let no = $('#searchNo').val().toLowerCase();
 
-  let filtered = contracts.filter(function(c){
+  let filtered = getLedgerContracts().filter(function(c){
     if (status && c.status !== status) return false;
     if (type && (c.category||c.type) !== type) return false;
     if (name && c.name.toLowerCase().indexOf(name) === -1) return false;
@@ -237,7 +245,7 @@ function resetFilter() {
   $('#searchType').val('');
   $('#searchName').val('');
   $('#searchNo').val('');
-  renderContractTable(contracts);
+  renderContractTable(getLedgerContracts());
   updateTotalCount();
 }
 
@@ -261,7 +269,7 @@ function printContract(id) {
 }
 
 function refreshList() {
-  renderContractTable(contracts);
+  renderContractTable(getLedgerContracts());
   updateTotalCount();
   alert('列表已刷新。');
 }
