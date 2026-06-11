@@ -4,7 +4,9 @@ function getDraftList() {
   var name = $('#draftSearchName').val().toLowerCase();
   var no = $('#draftSearchNo').val().toLowerCase();
   var type = $('#draftSearchType').val();
-  var list = contracts;
+  // 只显示起草相关状态的合同
+  var DRAFT_STATUSES = ['draft', 'approving', 'rejected', 'withdrawn'];
+  var list = contracts.filter(function(c){ return DRAFT_STATUSES.indexOf(c.status) >= 0; });
   if (status) list = list.filter(function(c){ return c.status === status; });
   if (name) list = list.filter(function(c){ return c.name.toLowerCase().indexOf(name) >= 0; });
   if (no) list = list.filter(function(c){ return c.no.toLowerCase().indexOf(no) >= 0; });
@@ -22,7 +24,7 @@ function renderDraftTable(list) {
   } else {
     list.forEach(function(c){
       html += '<tr>';
-      html += '<td><input type="checkbox" class="draft-check-item" value="'+c.id+'" '+(c.status==='approved'||c.status==='approving'?'disabled':'')+'></td>';
+      html += '<td><input type="checkbox" class="draft-check-item" value="'+c.id+'" '+(c.status==='approving'?'disabled':'')+'></td>';
       html += '<td>'+c.id+'</td>';
       html += '<td><a href="#" onclick="'+(c.status==='draft'?'editDraftContract('+c.id+')':'openContractDetail('+c.id+')')+';return false;" style="color:var(--fa-primary);font-weight:500;">'+c.name+'</a></td>';
       html += '<td>'+c.no+'</td>';
@@ -40,9 +42,6 @@ function renderDraftTable(list) {
         html += '<a href="#" onclick="deleteContract('+c.id+');return false;" style="color:var(--fa-danger);" title="删除"><i class="fa-solid fa-trash"></i> 删除</a>';
       } else if (c.status === 'approving') {
         html += '<a href="#" onclick="withdrawContract('+c.id+');return false;" style="color:#777;margin-right:8px;" title="撤销"><i class="fa-solid fa-rotate-left"></i> 撤销</a>';
-        html += '<a href="#" onclick="openContractDetail('+c.id+',false,true);return false;" style="color:var(--fa-primary);margin-right:8px;" title="查看"><i class="fa-solid fa-eye"></i> 查看</a>';
-        html += '<a href="#" onclick="viewAuditRecord('+c.id+');return false;" style="color:var(--fa-info);" title="审核记录"><i class="fa-solid fa-clock-rotate-left"></i> 审核记录</a>';
-      } else if (c.status === 'approved') {
         html += '<a href="#" onclick="openContractDetail('+c.id+',false,true);return false;" style="color:var(--fa-primary);margin-right:8px;" title="查看"><i class="fa-solid fa-eye"></i> 查看</a>';
         html += '<a href="#" onclick="viewAuditRecord('+c.id+');return false;" style="color:var(--fa-info);" title="审核记录"><i class="fa-solid fa-clock-rotate-left"></i> 审核记录</a>';
       } else if (c.status === 'rejected') {

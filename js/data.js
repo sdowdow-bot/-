@@ -16,7 +16,6 @@ const STATUS = {
 const STATUS_LABEL = {
   draft: '草稿',
   approving: '审核中',
-  approved: '已通过',
   rejected: '已驳回',
   withdrawn: '已撤销',
   importPending: '导入待补全',
@@ -32,7 +31,6 @@ const STATUS_LABEL = {
 const STATUS_CLASS = {
   draft: 'status-draft',
   approving: 'status-approving',
-  approved: 'status-approved',
   rejected: 'status-rejected',
   withdrawn: 'status-withdrawn',
   importPending: 'status-importPending',
